@@ -17,7 +17,7 @@ public class DisplayAct extends AppCompatActivity {
         String s = intent.getStringExtra(MainActivity.EXTRA);
 
         TextView textView = new TextView(this);
-        textView.setTextColor(25);
+        textView.setTextSize(45);
         textView.setText(s);
 
         setContentView(textView);
