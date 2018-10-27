@@ -40,8 +40,7 @@ public class MainActivity extends AppCompatActivity {
         wifi.setWifiEnabled(true);
     }
 
-    public void connect(View view)
-    {
+    public void connect(View view) throws InterruptedException {
         WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         EditText passEdit = (EditText) findViewById(R.id.pass);
         EditText ssidEdit = (EditText) findViewById(R.id.ssid);
@@ -52,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         if( !connectToKnownWiFi(wifi, ssid) ) {
             boolean isSuccess = connectToUnknown(wifi, ssid, pass);
+            wait(1000*20);
             if( !isSuccess ){
                 errorView.append("Error while connecting");
             }else if(isSuccess){
