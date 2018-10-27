@@ -8,6 +8,10 @@ import android.content.Context;
 //import android.content.Intent;
 //import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -41,12 +45,15 @@ public class MainActivity extends AppCompatActivity {
         WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         EditText passEdit = (EditText) findViewById(R.id.pass);
         EditText ssidEdit = (EditText) findViewById(R.id.ssid);
+        TextView errorView = (TextView) findViewById(R.id.errorV);
 
         String ssid = ssidEdit.getText().toString();
         String pass = passEdit.getText().toString();
 
         if( !connectToKnownWiFi(wifi, ssid) ) {
-            connectToUnknown(wifi, ssid, pass);
+            if(connectToUnknown(wifi, ssid, pass)){
+                errorView.setText("Error while connecting");
+            }
         }
     }
 

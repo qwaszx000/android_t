@@ -36,6 +36,9 @@
                 android:text="connect"
                 android:onClick="connect"/>
         </TableRow>
+        <TableRow>
+            <TextView android:id="@+id/errorV"/>
+        </TableRow>
     </TableLayout>
 
 </android.support.constraint.ConstraintLayout>
