@@ -89,11 +89,19 @@ public class MainActivity extends AppCompatActivity {
         WifiConfiguration wifiConf = new WifiConfiguration();
         wifiConf.SSID = ssid;
         wifiConf.preSharedKey = ("\"" + pass + "\"");
-        wifi.addNetwork(wifiConf);
+        int iid = wifi.addNetwork(wifiConf);
+        /*
         if(connectToKnownWiFi(wifi, ssid)){
             return true;
+        }*/
+        wifi.disconnect();
+        wifi.enableNetwork(iid, true);
+        wifi.reconnect();
+        wifi.setWifiEnabled(true);
+        if(iid == -1) {
+            wifi.removeNetwork(iid);
+            return false;
         }
-        wifi.removeNetwork(wifiConf.networkId);
-        return false;
+        return true;
     }
 }
