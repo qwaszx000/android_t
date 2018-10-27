@@ -65,13 +65,13 @@ public class MainActivity extends AppCompatActivity {
      */
     boolean connectToKnownWiFi(WifiManager wifi, String ssid)
     {
+        wifi.setWifiEnabled(true);
         List<WifiConfiguration> knownList = wifi.getConfiguredNetworks();
         for(WifiConfiguration i : knownList){
             if(i.SSID  != null && i.SSID.equals("\""+ssid+"\"")){
-                wifi.setWifiEnabled(true);
-                wifi.disconnect();
+                //wifi.disconnect();
                 wifi.enableNetwork(i.networkId, true);
-                wifi.reconnect();
+                //wifi.reconnect();
 
                 return true;
             }
@@ -92,8 +92,11 @@ public class MainActivity extends AppCompatActivity {
         wifiConf.wepKeys[0] = ("\""+ssid+"\"");
         wifiConf.wepTxKeyIndex = 0;
         wifiConf.preSharedKey = ("\"" + pass + "\"");
-        int iid = wifi.addNetwork(wifiConf);
 
+        if(wifi.addNetwork(wifiConf) == -1)
+            return false;
+
+        wifi.saveConfiguration();
         if(connectToKnownWiFi(wifi, ssid)){
             return true;
         }
@@ -103,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         wifi.reconnect();
         wifi.setWifiEnabled(true);
         */
-        wifi.removeNetwork(iid);
+        //wifi.removeNetwork(iid);
         return false;
 
     }
