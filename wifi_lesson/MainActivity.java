@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         if( !connectToKnownWiFi(wifi, ssid) ) {
             if(connectToUnknown(wifi, ssid, pass)){
-                errorView.setText("Error while connecting");
+                errorView.append("Error while connecting");
             }
         }
     }
@@ -69,10 +69,9 @@ public class MainActivity extends AppCompatActivity {
         List<WifiConfiguration> knownList = wifi.getConfiguredNetworks();
         for(WifiConfiguration i : knownList){
             if(i.SSID  != null && i.SSID.equals("\""+ssid+"\"")){
-                //wifi.disconnect();
+                wifi.disconnect();
                 wifi.enableNetwork(i.networkId, true);
-                //wifi.reconnect();
-
+                wifi.reconnect();
                 return true;
             }
         }
