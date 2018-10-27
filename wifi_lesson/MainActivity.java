@@ -51,8 +51,10 @@ public class MainActivity extends AppCompatActivity {
         String pass = passEdit.getText().toString();
 
         if( !connectToKnownWiFi(wifi, ssid) ) {
-            if(connectToUnknown(wifi, ssid, pass)){
+            if( !connectToUnknown(wifi, ssid, pass) ){
                 errorView.append("Error while connecting");
+            }else{
+                errorView.append(wifi.getConnectionInfo().toString());
             }
         }
     }
