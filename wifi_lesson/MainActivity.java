@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void connect(View view) throws InterruptedException {
         WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        wifi.setWifiEnabled(true);
         EditText passEdit = (EditText) findViewById(R.id.pass);
         EditText ssidEdit = (EditText) findViewById(R.id.ssid);
         TextView errorView = (TextView) findViewById(R.id.errorV);
@@ -51,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
 
         if( !connectToKnownWiFi(wifi, ssid) ) {
             boolean isSuccess = connectToUnknown(wifi, ssid, pass);
-            wait(1000*20);
             if( !isSuccess ){
                 errorView.append("Error while connecting");
             }else if(isSuccess){
@@ -74,7 +74,8 @@ public class MainActivity extends AppCompatActivity {
             if(i.SSID  != null && i.SSID.equals("\""+ssid+"\"")){
                 wifi.disconnect();
                 wifi.enableNetwork(i.networkId, true);
-                wifi.reconnect();
+                if(!wifi.reconnect())
+                    return false;
                 return true;
             }
         }
@@ -89,27 +90,40 @@ public class MainActivity extends AppCompatActivity {
      */
     boolean connectToUnknown(WifiManager wifi, String ssid, String pass)
     {
+        wifi.setWifiEnabled(true);
         WifiConfiguration wifiConf = new WifiConfiguration();
+        wifiConf.status = WifiConfiguration.Status.DISABLED;
         wifiConf.SSID = ("\""+ssid+"\"");
-        wifiConf.wepKeys[0] = ("\""+ssid+"\"");
+        wifiConf.wepKeys[0] = ("\""+pass+"\"");
         wifiConf.wepTxKeyIndex = 0;
+        wifiConf.priority = 40;
+        wifiConf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+        wifiConf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
+        wifiConf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
         wifiConf.preSharedKey = ("\"" + pass + "\"");
+        wifiConf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+        wifiConf.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
+        wifiConf.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
+        wifiConf.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
+        wifiConf.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.SHARED);
+        wifiConf.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.LEAP);
+        wifiConf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
+        wifiConf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.NONE);
+        wifiConf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
 
-        if(wifi.addNetwork(wifiConf) == -1)
-            return false;
+        int res = wifi.addNetwork(wifiConf);
 
         wifi.saveConfiguration();
-        if(connectToKnownWiFi(wifi, ssid)){
-            return true;
-        }
+        wifi.disconnect();
+        wifi.enableNetwork(res, true);
+        wifi.reconnect();
         /*
         wifi.disconnect();
         wifi.enableNetwork(iid, true);
         wifi.reconnect();
-        wifi.setWifiEnabled(true);
         */
         //wifi.removeNetwork(iid);
-        return false;
+        return true;
 
     }
 }
