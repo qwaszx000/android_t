@@ -34,12 +34,6 @@ public class MainActivity extends AppCompatActivity {
         wifi.setWifiEnabled(false);
     }
 
-    public void bruteWiFi(View view)
-    {
-        WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        wifi.setWifiEnabled(true);
-    }
-
     public void connect(View view) throws InterruptedException {
         WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         wifi.setWifiEnabled(true);
