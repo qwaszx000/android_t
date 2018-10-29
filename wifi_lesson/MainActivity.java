@@ -94,13 +94,13 @@ public class MainActivity extends AppCompatActivity {
         List<WifiConfiguration> knownList = wifi.getConfiguredNetworks();
         for(WifiConfiguration i : knownList){
             if(i.SSID  != null && i.SSID.equals("\""+ssid+"\"")){
-                wifi.disconnect();
+                //wifi.disconnect();
                 if(!silent)
                     errorView.append("Connecting to " + ("\"" + ssid + "\"\r\n") );
                 boolean rs = wifi.enableNetwork(i.networkId, true);
                 if(!silent)
                     errorView.append("Enable network returned:" + rs + "\r\n");
-                rs = wifi.reconnect();
+                //rs = wifi.reconnect();
                 if(!silent)
                     errorView.append("Reconnect returned:" + rs + "\r\n");
                 return true;
