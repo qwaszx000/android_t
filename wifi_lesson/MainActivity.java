@@ -79,7 +79,8 @@ public class MainActivity extends AppCompatActivity {
                 errorView.append("Connecting to " + ("\"" + ssid + "\"\r\n") );
                 boolean rs = wifi.enableNetwork(i.networkId, true);
                 errorView.append("Enable network returned:" + rs + "\r\n");
-                wifi.reconnect();
+                rs = wifi.reconnect();
+                errorView.append("Reconnect returned:" + rs + "\r\n");
                 return true;
             }
         }
@@ -108,9 +109,9 @@ public class MainActivity extends AppCompatActivity {
         wifiConf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
         wifiConf.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
         int res = wifi.addNetwork(wifiConf);
-        errorView.append("add Network returned " + res +"\n");
+        errorView.append("add Network returned " + res +"\r\n");
         boolean b = wifi.enableNetwork(res, true);
-        errorView.append("enableNetwork returned " + b + "\n");
+        errorView.append("enableNetwork returned " + b + "\r\n");
         //wifiConf.hiddenSSID = true;
         //wifiConf.status = WifiConfiguration.Status.ENABLED;
         //wifiConf.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
