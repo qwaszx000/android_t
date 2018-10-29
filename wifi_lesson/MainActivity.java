@@ -34,6 +34,12 @@ public class MainActivity extends AppCompatActivity {
         wifi.setWifiEnabled(false);
     }
 
+    public void bruteWiFi(View view)
+    {
+        WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        wifi.setWifiEnabled(true);
+    }
+
     public void connect(View view) throws InterruptedException {
         WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         wifi.setWifiEnabled(true);
@@ -95,7 +101,9 @@ public class MainActivity extends AppCompatActivity {
         wifiConf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
         wifiConf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
         wifiConf.preSharedKey = ("\"" + pass + "\"");
-        wifiConf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+        wifiConf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
+        wifiConf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_EAP);
+        wifiConf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.IEEE8021X);
         wifiConf.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
         wifiConf.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
         wifiConf.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
@@ -108,16 +116,21 @@ public class MainActivity extends AppCompatActivity {
         int res = wifi.addNetwork(wifiConf);
 
         wifi.saveConfiguration();
-        wifi.disconnect();
-        wifi.enableNetwork(res, true);
-        wifi.reconnect();
+        if(connectToKnownWiFi(wifi, ssid)) {
+            return true;
+        }else{
+            return false;
+        }
+        //wifi.disconnect();
+        //wifi.enableNetwork(res, true);
+        //wifi.reconnect();
         /*
         wifi.disconnect();
         wifi.enableNetwork(iid, true);
         wifi.reconnect();
         */
         //wifi.removeNetwork(iid);
-        return true;
+        //return false;
 
     }
 }
