@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
      */
     boolean connectToUnknown(WifiManager wifi, String ssid, String pass)
     {
+        TextView errorView = (TextView) findViewById(R.id.errorV);
         wifi.setWifiEnabled(true);
         WifiConfiguration wifiConf = new WifiConfiguration();
         wifiConf.SSID = ("\""+ssid+"\"");
@@ -103,9 +104,9 @@ public class MainActivity extends AppCompatActivity {
         wifiConf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
         wifiConf.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
         int res = wifi.addNetwork(wifiConf);
-        Log.d("WifiPreference", "add Network returned " + res );
+        errorView.append("add Network returned " + res +"\n");
         boolean b = wifi.enableNetwork(res, true);
-        Log.d("WifiPreference", "enableNetwork returned " + b );
+        errorView.append("enableNetwork returned " + b + "\n");
         //wifiConf.hiddenSSID = true;
         //wifiConf.status = WifiConfiguration.Status.ENABLED;
         //wifiConf.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
