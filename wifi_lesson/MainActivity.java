@@ -116,8 +116,8 @@ public class MainActivity extends AppCompatActivity {
         wifiConf.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
         int res = wifi.addNetwork(wifiConf);
         errorView.append("add Network returned " + res +"\r\n");
-        boolean b = wifi.enableNetwork(res, true);
-        errorView.append("enableNetwork returned " + b + "\r\n");
+        //boolean b = wifi.enableNetwork(res, true);
+        //errorView.append("enableNetwork returned " + b + "\r\n");
         //wifiConf.hiddenSSID = true;
         //wifiConf.status = WifiConfiguration.Status.ENABLED;
         //wifiConf.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
@@ -148,14 +148,12 @@ public class MainActivity extends AppCompatActivity {
 
         //int res = wifi.addNetwork(wifiConf);
         //wifi.enableNetwork(res, true);
-        /*
+
         if(connectToKnownWiFi(wifi, ssid)) {
             return true;
         }else{
             return false;
         }
-        */
-        return true;
         //wifi.disconnect();
         //wifi.enableNetwork(res, true);
         //wifi.reconnect();
