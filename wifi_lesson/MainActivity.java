@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         if( !knownConnectionSuccess ) {
             boolean isSuccess = connectToUnknown(wifi, ssid, pass);
             if( !isSuccess ){
-                errorView.append("Error while connecting");
+                errorView.append("Error while connecting\r\n");
             }else if(isSuccess){
                 errorView.append(wifi.getConnectionInfo().toString());
             }
@@ -76,9 +76,9 @@ public class MainActivity extends AppCompatActivity {
         for(WifiConfiguration i : knownList){
             if(i.SSID  != null && i.SSID.equals("\""+ssid+"\"")){
                 wifi.disconnect();
-                errorView.append("Connecting to " + ("\"" + ssid + "\"") );
+                errorView.append("Connecting to " + ("\"" + ssid + "\"\r\n") );
                 boolean rs = wifi.enableNetwork(i.networkId, true);
-                errorView.append("Enable network returned:" + rs);
+                errorView.append("Enable network returned:" + rs + "\r\n");
                 wifi.reconnect();
                 return true;
             }
