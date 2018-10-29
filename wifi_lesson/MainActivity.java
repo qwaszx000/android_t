@@ -55,7 +55,10 @@ public class MainActivity extends AppCompatActivity {
             if( !isSuccess ){
                 errorView.append("Error while connecting\r\n");
             }else if(isSuccess){
-                errorView.append(wifi.getConnectionInfo().toString());
+                String conInfo[] = wifi.getConnectionInfo().toString().split(",");
+                for(String i : conInfo) {
+                    errorView.append(i+"\r\n");
+                }
             }
         }else if(knownConnectionSuccess){
             errorView.append(wifi.getConnectionInfo().toString());
