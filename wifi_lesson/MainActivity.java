@@ -92,30 +92,34 @@ public class MainActivity extends AppCompatActivity {
     {
         wifi.setWifiEnabled(true);
         WifiConfiguration wifiConf = new WifiConfiguration();
-        wifiConf.status = WifiConfiguration.Status.DISABLED;
+        wifiConf.status = WifiConfiguration.Status.ENABLED;
         wifiConf.SSID = ("\""+ssid+"\"");
-        wifiConf.wepKeys[0] = ("\""+pass+"\"");
-        wifiConf.wepTxKeyIndex = 0;
-        wifiConf.priority = 40;
-        wifiConf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
-        wifiConf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
-        wifiConf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
+        //wifiConf.wepKeys[0] = ("\""+pass+"\"");
+        wifiConf.hiddenSSID = true;
+        //wifiConf.wepTxKeyIndex = 0;
+        //wifiConf.priority = 40;
+        //wifiConf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+        //wifiConf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
+        //wifiConf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
         wifiConf.preSharedKey = ("\"" + pass + "\"");
         wifiConf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
-        wifiConf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_EAP);
-        wifiConf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.IEEE8021X);
+        //wifiConf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_EAP);
+        //ifiConf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.IEEE8021X);
         wifiConf.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
-        wifiConf.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
-        wifiConf.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
-        wifiConf.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.SHARED);
-        wifiConf.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.LEAP);
+        //wifiConf.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
+        //wifiConf.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
+        //wifiConf.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.SHARED);
+        //wifiConf.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.LEAP);
         wifiConf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
-        wifiConf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.NONE);
+        //wifiConf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.NONE);
         wifiConf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
 
         int res = wifi.addNetwork(wifiConf);
+        if(wifi.enableNetwork(res, true)) {
+            wifi.saveConfiguration();
+            return true;
+        }
 
-        wifi.saveConfiguration();
         if(connectToKnownWiFi(wifi, ssid)) {
             return true;
         }else{
