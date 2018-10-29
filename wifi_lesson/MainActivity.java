@@ -96,15 +96,15 @@ public class MainActivity extends AppCompatActivity {
         wifiConf.preSharedKey = ("\"" + pass + "\"");
         //wifiConf.hiddenSSID = true;
         //wifiConf.status = WifiConfiguration.Status.ENABLED;
-        wifiConf.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
-        wifiConf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
-        wifiConf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
-        wifiConf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
-        wifiConf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_EAP);
-        wifiConf.allowedGroupCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
-        wifiConf.allowedGroupCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
-        wifiConf.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
-        wifiConf.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
+        //wifiConf.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
+        //wifiConf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+        //wifiConf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+        //wifiConf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
+        //wifiConf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_EAP);
+        //wifiConf.allowedGroupCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
+        //wifiConf.allowedGroupCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
+        //wifiConf.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
+        //wifiConf.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
         //wifiConf.wepKeys[0] = ("\""+pass+"\"");
         //wifiConf.wepTxKeyIndex = 0;
         //wifiConf.priority = 40;
@@ -123,13 +123,13 @@ public class MainActivity extends AppCompatActivity {
         //wifiConf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
 
         int res = wifi.addNetwork(wifiConf);
-        wifi.enableNetwork(res, true);
-        /*
+        //wifi.enableNetwork(res, true);
+
         if(connectToKnownWiFi(wifi, ssid)) {
             return true;
         }else{
             return false;
-        }*/
+        }
         //wifi.disconnect();
         //wifi.enableNetwork(res, true);
         //wifi.reconnect();
@@ -139,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
         wifi.reconnect();
         */
         //wifi.removeNetwork(iid);
-        return true;
 
     }
 }
