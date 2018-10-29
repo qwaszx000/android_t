@@ -102,6 +102,8 @@ public class MainActivity extends AppCompatActivity {
         //wifiConf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
         //wifiConf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
         wifiConf.preSharedKey = ("\"" + pass + "\"");
+        wifiConf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+        wifiConf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
         wifiConf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
         //wifiConf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_EAP);
         //ifiConf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.IEEE8021X);
@@ -119,12 +121,12 @@ public class MainActivity extends AppCompatActivity {
             wifi.saveConfiguration();
             return true;
         }
-
+        /*
         if(connectToKnownWiFi(wifi, ssid)) {
             return true;
         }else{
             return false;
-        }
+        }*/
         //wifi.disconnect();
         //wifi.enableNetwork(res, true);
         //wifi.reconnect();
@@ -134,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
         wifi.reconnect();
         */
         //wifi.removeNetwork(iid);
-        //return false;
+        return true;
 
     }
 }
