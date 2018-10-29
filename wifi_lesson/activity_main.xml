@@ -37,7 +37,9 @@
                 android:onClick="connect"/>
         </TableRow>
         <TableRow>
-            <TextView android:id="@+id/errorV"/>
+            <TextView android:id="@+id/errorV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </TableRow>
     </TableLayout>
 
