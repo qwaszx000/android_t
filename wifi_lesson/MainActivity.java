@@ -9,7 +9,7 @@ import android.content.Context;
 //import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
+import android.util.Log;
 import org.w3c.dom.Text;
 
 import java.util.List;
@@ -94,6 +94,18 @@ public class MainActivity extends AppCompatActivity {
         WifiConfiguration wifiConf = new WifiConfiguration();
         wifiConf.SSID = ("\""+ssid+"\"");
         wifiConf.preSharedKey = ("\"" + pass + "\"");
+        wifiConf.hiddenSSID = true;
+        wifiConf.status = WifiConfiguration.Status.ENABLED;
+        wifiConf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+        wifiConf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+        wifiConf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
+        wifiConf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
+        wifiConf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
+        wifiConf.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
+        int res = wifi.addNetwork(wifiConf);
+        Log.d("WifiPreference", "add Network returned " + res );
+        boolean b = wifi.enableNetwork(res, true);
+        Log.d("WifiPreference", "enableNetwork returned " + b );
         //wifiConf.hiddenSSID = true;
         //wifiConf.status = WifiConfiguration.Status.ENABLED;
         //wifiConf.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
@@ -122,14 +134,16 @@ public class MainActivity extends AppCompatActivity {
         //wifiConf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.NONE);
         //wifiConf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
 
-        int res = wifi.addNetwork(wifiConf);
+        //int res = wifi.addNetwork(wifiConf);
         //wifi.enableNetwork(res, true);
-
+        /*
         if(connectToKnownWiFi(wifi, ssid)) {
             return true;
         }else{
             return false;
         }
+        */
+        return true;
         //wifi.disconnect();
         //wifi.enableNetwork(res, true);
         //wifi.reconnect();
