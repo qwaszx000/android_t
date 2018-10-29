@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
         wifiConf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
         wifiConf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
         wifiConf.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
+        wifiConf.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
         //wifiConf.wepKeys[0] = ("\""+pass+"\"");
         //wifiConf.wepTxKeyIndex = 0;
         //wifiConf.priority = 40;
