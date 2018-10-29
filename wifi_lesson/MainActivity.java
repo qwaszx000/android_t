@@ -68,14 +68,16 @@ public class MainActivity extends AppCompatActivity {
      */
     boolean connectToKnownWiFi(WifiManager wifi, String ssid)
     {
+        TextView errorView = (TextView) findViewById(R.id.errorV);
         wifi.setWifiEnabled(true);
         List<WifiConfiguration> knownList = wifi.getConfiguredNetworks();
         for(WifiConfiguration i : knownList){
             if(i.SSID  != null && i.SSID.equals("\""+ssid+"\"")){
                 wifi.disconnect();
-                wifi.enableNetwork(i.networkId, true);
-                if(!wifi.reconnect())
-                    return false;
+                errorView.append("Connecting to " + ("\"" + ssid + "\"") );
+                boolean rs = wifi.enableNetwork(i.networkId, true);
+                errorView.append("Enable network returned:" + rs);
+                wifi.reconnect();
                 return true;
             }
         }
