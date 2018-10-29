@@ -49,14 +49,16 @@ public class MainActivity extends AppCompatActivity {
 
         String ssid = ssidEdit.getText().toString();
         String pass = passEdit.getText().toString();
-
-        if( !connectToKnownWiFi(wifi, ssid) ) {
+        boolean knownConnectionSuccess = connectToKnownWiFi(wifi, ssid);
+        if( !knownConnectionSuccess ) {
             boolean isSuccess = connectToUnknown(wifi, ssid, pass);
             if( !isSuccess ){
                 errorView.append("Error while connecting");
             }else if(isSuccess){
                 errorView.append(wifi.getConnectionInfo().toString());
             }
+        }else if(knownConnectionSuccess){
+            errorView.append(wifi.getConnectionInfo().toString());
         }
     }
 
