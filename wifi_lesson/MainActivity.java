@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         wifi.setWifiEnabled(true);
         List<WifiConfiguration> knownList = wifi.getConfiguredNetworks();
         for(WifiConfiguration i : knownList){
-            if(i.SSID  != null && i.SSID.equals(ssid)){
+            if(i.SSID  != null && i.SSID.equals("\"" + ssid + "\"")){
                 //wifi.disconnect();
                 if(!silent)
                     errorView.append("Connecting to " + ("\"" + ssid + "\"\r\n") );
@@ -120,8 +120,8 @@ public class MainActivity extends AppCompatActivity {
         TextView errorView = (TextView) findViewById(R.id.errorV);
         wifi.setWifiEnabled(true);
         WifiConfiguration wifiConf = new WifiConfiguration();
-        wifiConf.SSID = (ssid);
-        wifiConf.preSharedKey = (pass);
+        wifiConf.SSID = ("\"" + ssid + "\"");
+        wifiConf.preSharedKey = ("\"" + pass + "\"");
         wifiConf.hiddenSSID = true;
         wifiConf.status = WifiConfiguration.Status.ENABLED;
         wifiConf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
