@@ -212,8 +212,14 @@ public class MainActivity extends AppCompatActivity {
                 wifi.reconnect();
 
                 WifiInfo wInfo = wifi.getConnectionInfo();
-                if(wInfo.getBSSID() != "00:00:00:00:00:00"){
-                    this.errorView.append("Found pass: " + p);
+                try {
+                    if (wInfo.getBSSID() != "00:00:00:00:00:00") {
+                        this.errorView.append("Found pass: " + p);
+                        break;
+                    }
+                }catch(Exception e){
+                    this.errorView.append(e.toString());
+                    this.errorView.append("Found pass: " + p + "\r\n");
                     break;
                 }
                 try {
