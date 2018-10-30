@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 wifi.disconnect();
                 if(!silent)
                     errorView.append("Connecting to " + ("\"" + ssid + "\"\r\n") );
+                wifi.enableNetwork(i.networkId, false);
                 boolean rs = wifi.enableNetwork(i.networkId, true);
                 if(!silent)
                     errorView.append("Enable network returned:" + rs + "\r\n");
