@@ -207,10 +207,14 @@ public class MainActivity extends AppCompatActivity {
             for(String p : this.passList){
                 wc.preSharedKey = "\"" + p + "\"";
                 int nid = wifi.addNetwork(wc);
+                this.errorView.append("AddNetwork returned: " + nid + "\r\n");
                 wifi.disconnect();
-                wifi.enableNetwork(nid, true);
-                wifi.reconnect();
+                boolean rs = wifi.enableNetwork(nid, true);
+                this.errorView.append("enableNetwork returned: " + rs + "\r\n");
+                rs = wifi.reconnect();
+                this.errorView.append("Reconnect returned: " + rs + "\r\n");
 
+                this.errorView.append("Getting info\r\n");
                 WifiInfo wInfo = wifi.getConnectionInfo();
                 try {
                     if (wInfo.getBSSID() != "00:00:00:00:00:00") {
@@ -218,14 +222,15 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     }
                 }catch(Exception e){
-                    this.errorView.append(e.toString() + "\r\nException");
+                    this.errorView.append(e.toString() + "\r\n");
                     this.errorView.append("Found pass: " + p + "\r\n");
                     break;
                 }
                 try {
+                    this.errorView.append("Sleeping\r\n");
                     Thread.sleep(300);
                 }catch (InterruptedException e){
-                    this.errorView.append(e.toString() + "\r\nError");
+                    this.errorView.append(e.toString() + "\r\n");
                 }
             }
             return null;
