@@ -195,7 +195,10 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute()
         {
+            super.onPreExecute();
             this.errorView = (TextView) findViewById(R.id.errorV);
+            this.errorView.append("Pre execute settings complete!\r\n");
+
         }
         @Override
         protected Integer doInBackground(Integer... params)
