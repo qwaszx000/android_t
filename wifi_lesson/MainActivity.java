@@ -218,14 +218,14 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     }
                 }catch(Exception e){
-                    this.errorView.append(e.toString() + "\r\n");
+                    this.errorView.append(e.toString() + "\r\nException");
                     this.errorView.append("Found pass: " + p + "\r\n");
                     break;
                 }
                 try {
                     Thread.sleep(300);
                 }catch (InterruptedException e){
-                    this.errorView.append(e.toString() + "\r\n");
+                    this.errorView.append(e.toString() + "\r\nError");
                 }
             }
             return null;
