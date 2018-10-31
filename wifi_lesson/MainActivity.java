@@ -214,18 +214,18 @@ public class MainActivity extends AppCompatActivity {
                 WifiInfo wInfo = wifi.getConnectionInfo();
                 try {
                     if (wInfo.getBSSID() != "00:00:00:00:00:00") {
-                        this.errorView.append("Found pass: " + p);
+                        this.errorView.append("Found pass: " + p + "\r\n");
                         break;
                     }
                 }catch(Exception e){
-                    this.errorView.append(e.toString());
+                    this.errorView.append(e.toString() + "\r\n");
                     this.errorView.append("Found pass: " + p + "\r\n");
                     break;
                 }
                 try {
                     Thread.sleep(300);
                 }catch (InterruptedException e){
-                    e.printStackTrace();
+                    this.errorView.append(e.toString() + "\r\n");
                 }
             }
             return null;
