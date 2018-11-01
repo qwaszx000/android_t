@@ -211,12 +211,12 @@ public class MainActivity extends AppCompatActivity {
                 wc.preSharedKey = "\"" + p + "\"";
                 int nid = wifi.addNetwork(wc);
                 this.errorView.append("AddNetwork returned: " + nid + "\r\n");
-                wifi.disconnect();
-                this.errorView.append("Disconnected, connecting to new...\r\n");
+                //wifi.disconnect();
+                //this.errorView.append("Disconnected, connecting to new...\r\n");
                 boolean rs = wifi.enableNetwork(nid, true);
                 this.errorView.append("enableNetwork returned: " + rs + "\r\n");
-                rs = wifi.reconnect();
-                this.errorView.append("Reconnect returned: " + rs + "\r\n");
+                //rs = wifi.reconnect();
+                //this.errorView.append("Reconnect returned: " + rs + "\r\n");
 
                 this.errorView.append("Getting info\r\n");
                 WifiInfo wInfo = wifi.getConnectionInfo();
