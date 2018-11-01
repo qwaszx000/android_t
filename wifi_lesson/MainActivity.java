@@ -204,10 +204,10 @@ public class MainActivity extends AppCompatActivity {
         protected Integer doInBackground(Integer... params)
         {
             WifiManager wifi = this.wifi;
-            WifiConfiguration wc = new WifiConfiguration();
-
-            wc.SSID = ("\"" + this.ssid + "\"");
             for(String p : this.passList){
+                WifiConfiguration wc = new WifiConfiguration();
+
+                wc.SSID = ("\"" + this.ssid + "\"");
                 wc.preSharedKey = "\"" + p + "\"";
                 int nid = wifi.addNetwork(wc);
                 this.errorView.append("AddNetwork returned: " + nid + "\r\n");
