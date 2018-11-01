@@ -212,12 +212,13 @@ public class MainActivity extends AppCompatActivity {
                 int nid = wifi.addNetwork(wc);
                 this.errorView.append("AddNetwork returned: " + nid + "\r\n");
                 //wifi.disconnect();
+                /*
                 this.errorView.append("Disconnected, connecting to new...\r\n");
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                }
+                }*/
                 boolean rs = wifi.enableNetwork(nid, true);
                 this.errorView.append("enableNetwork returned: " + rs + "\r\n");
                 //rs = wifi.reconnect();
