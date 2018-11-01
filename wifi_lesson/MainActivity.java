@@ -222,16 +222,15 @@ public class MainActivity extends AppCompatActivity {
                 WifiInfo wInfo = wifi.getConnectionInfo();
                 try {
                     if (wInfo.getBSSID() != "00:00:00:00:00:00") {
-                        this.errorView.append("Found pass: " + p + "\r\n");
-                        break;
+                        this.errorView.append("Found pass by bssid: " + p + "\r\n");
                     }
                 }catch(Exception e){
                     this.errorView.append(e.toString() + "\r\n");
-                    this.errorView.append("Found pass: " + p + "\r\n");
-                    break;
+                    this.errorView.append("Found pass by exception: " + p + "\r\n");
                 }
                 try {
                     this.errorView.append("Sleeping\r\n");
+                    wifi.removeNetwork(nid);
                     Thread.sleep(300);
                 }catch (InterruptedException e){
                     this.errorView.append(e.toString() + "\r\n");
