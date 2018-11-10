@@ -87,19 +87,28 @@ public class MainActivity extends AppCompatActivity {
         TextView errorView = (TextView) findViewById(R.id.errorV);
         wifi.setWifiEnabled(true);
         List<WifiConfiguration> knownList = wifi.getConfiguredNetworks();
+
         for(WifiConfiguration i : knownList){
             if(i.SSID  != null && i.SSID.equals("\"" + ssid + "\"")){
                 wifi.disconnect();
                 if(!silent)
                     errorView.append("Connecting to " + ("\"" + ssid + "\"\r\n") );
                 //wifi.enableNetwork(i.networkId, false);
+
                 boolean rs = wifi.enableNetwork(i.networkId, true);
                 if(!silent)
                     errorView.append("Enable network returned:" + rs + "\r\n");
+
                 rs = wifi.reconnect();
                 if(!silent)
                     errorView.append("Reconnect returned:" + rs + "\r\n");
-                return true;
+
+                WifiInfo winf = wifi.getConnectionInfo();
+                if(winf.getSupplicantState() == SupplicantState.ASSOCIATED ||
+                        winf.getSupplicantState() == SupplicantState.COMPLETED) {
+                    errorView.append("Connected!\r\n");
+                    return true;
+                }
             }
         }
         return false;
