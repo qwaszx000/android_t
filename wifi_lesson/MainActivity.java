@@ -44,8 +44,10 @@ public class MainActivity extends AppCompatActivity {
         wifi.setWifiEnabled(true);
         String ssid = ssidEdit.getText().toString();
 
-        CrackClass cr = new CrackClass(wifi, ssid);
-        cr.execute();
+        String passList[] = {"00000000", "87654321", "12345678"};
+        for(String i : passList){
+            connectToUnknown(wifi, ssid, i, true);
+        }
     }
 
     public void connect(View view) throws InterruptedException {
