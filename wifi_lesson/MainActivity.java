@@ -1,6 +1,7 @@
 package com.example.user.wificontroller;
 
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDialogFragment;
@@ -14,6 +15,12 @@ import android.widget.TextView;
 import android.util.Log;
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.OutputStreamWriter;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -41,8 +48,31 @@ public class MainActivity extends AppCompatActivity {
         EditText ssidEdit = (EditText) findViewById(R.id.ssid);
         wifi.setWifiEnabled(true);
         String ssid = ssidEdit.getText().toString();
+        String passList[] = null;
         boolean res = false;
-        String passList[] = {"00000000", "87654321", "12345678"};
+        try{
+            File android_memory = Environment.getRootDirectory();
+            File f = new File(android_memory, "list.txt");
+            f.setReadable(true);
+            FileInputStream fr = new FileInputStream(f);
+            byte data[] = new byte[(int)f.length()];
+            fr.read(data);
+            fr.close();
+
+            String raw_data = new String(data, "UTF-8");
+            passList = raw_data.split(";");
+
+        } catch (Exception e) {
+            try {
+                FileOutputStream fout = openFileOutput("list.txt", MODE_PRIVATE);
+                OutputStreamWriter owr = new OutputStreamWriter(fout);
+                owr.write("LIST");
+                owr.flush();
+                owr.close();
+            } catch (Exception e2) {
+
+            }
+        }
         for (String i : passList) {
             res = connectToUnknown(wifi, ssid, i, true);
             if(res)
@@ -55,7 +85,8 @@ public class MainActivity extends AppCompatActivity {
         for(int i = 0;i<pass_len;i++){
             while(passChars[i] <= 126){
                 if(passChars[i] == 126){
-
+                    passChars[i] = 32;
+                    passChars[i+1] += 1;
                 }
                 i++;
             }
