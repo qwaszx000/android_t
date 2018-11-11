@@ -15,6 +15,7 @@ import android.util.Log;
 import org.w3c.dom.Text;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,30 +25,41 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void enableWiFi(View view)
-    {
+    public void enableWiFi(View view) {
         WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         wifi.setWifiEnabled(true);
     }
 
-    public void disableWiFi(View view)
-    {
+    public void disableWiFi(View view) {
         WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         wifi.setWifiEnabled(false);
     }
 
-    public void bruteWiFi(View view)
-    {
+    public void bruteWiFi(View view) {
         WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         TextView errorView = (TextView) findViewById(R.id.errorV);
         EditText ssidEdit = (EditText) findViewById(R.id.ssid);
         wifi.setWifiEnabled(true);
         String ssid = ssidEdit.getText().toString();
-
+        boolean res = false;
         String passList[] = {"00000000", "87654321", "12345678"};
-        for(String i : passList){
-            connectToUnknown(wifi, ssid, i, true);
+        for (String i : passList) {
+            res = connectToUnknown(wifi, ssid, i, true);
+            if(res)
+                break;
         }
+        /*
+        int pass_len = 8;
+        String pass = "        ";//8 spaces
+        char passChars[] = pass.toCharArray();
+        for(int i = 0;i<pass_len;i++){
+            while(passChars[i] <= 126){
+                if(passChars[i] == 126){
+
+                }
+                i++;
+            }
+        }*/
     }
 
     public void connect(View view) throws InterruptedException {
@@ -60,20 +72,20 @@ public class MainActivity extends AppCompatActivity {
         String ssid = ssidEdit.getText().toString();
         String pass = passEdit.getText().toString();
         boolean knownConnectionSuccess = connectToKnownWiFi(wifi, ssid, false);
-        if( !knownConnectionSuccess ) {
+        if (!knownConnectionSuccess) {
             boolean isSuccess = connectToUnknown(wifi, ssid, pass, false);
-            if( !isSuccess ){
+            if (!isSuccess) {
                 errorView.append("Error while connecting\r\n");
-            }else if(isSuccess){
+            } else if (isSuccess) {
                 String conInfo[] = wifi.getConnectionInfo().toString().split(", ");
-                for(String i : conInfo) {
-                    errorView.append(i+"\r\n");
+                for (String i : conInfo) {
+                    errorView.append(i + "\r\n");
                 }
             }
-        }else if(knownConnectionSuccess){
+        } else if (knownConnectionSuccess) {
             String conInfo[] = wifi.getConnectionInfo().toString().split(", ");
-            for(String i : conInfo) {
-                errorView.append(i+"\r\n");
+            for (String i : conInfo) {
+                errorView.append(i + "\r\n");
             }
         }
     }
@@ -84,29 +96,32 @@ public class MainActivity extends AppCompatActivity {
     @param wifi
     @param ssid
      */
-    boolean connectToKnownWiFi(WifiManager wifi, String ssid, boolean silent)
-    {
+    boolean connectToKnownWiFi(WifiManager wifi, String ssid, boolean silent) {
         TextView errorView = (TextView) findViewById(R.id.errorV);
         wifi.setWifiEnabled(true);
         List<WifiConfiguration> knownList = wifi.getConfiguredNetworks();
 
-        for(WifiConfiguration i : knownList){
-            if(i.SSID  != null && i.SSID.equals("\"" + ssid + "\"")){
+        for (WifiConfiguration i : knownList) {
+            if (i.SSID != null && i.SSID.equals("\"" + ssid + "\"")) {
                 wifi.disconnect();
-                if(!silent)
-                    errorView.append("Connecting to " + ("\"" + ssid + "\"\r\n") );
+                if (!silent)
+                    errorView.append("Connecting to " + ("\"" + ssid + "\"\r\n"));
                 //wifi.enableNetwork(i.networkId, false);
 
                 boolean rs = wifi.enableNetwork(i.networkId, true);
-                if(!silent)
+                if (!silent)
                     errorView.append("Enable network returned:" + rs + "\r\n");
 
                 rs = wifi.reconnect();
-                if(!silent)
+                if (!silent)
                     errorView.append("Reconnect returned:" + rs + "\r\n");
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
 
+                }
                 WifiInfo winf = wifi.getConnectionInfo();
-                if(winf.getSupplicantState() == SupplicantState.ASSOCIATED ||
+                if (winf.getSupplicantState() == SupplicantState.ASSOCIATED ||
                         winf.getSupplicantState() == SupplicantState.COMPLETED) {
                     errorView.append("Connected!\r\n");
                     return true;
@@ -115,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return false;
     }
+
     /*
     Connects to unknown wifi.
     If success return true. Else returns false.
@@ -122,8 +138,7 @@ public class MainActivity extends AppCompatActivity {
     @param ssid
     @param pass
      */
-    boolean connectToUnknown(WifiManager wifi, String ssid, String pass, boolean silent)
-    {
+    boolean connectToUnknown(WifiManager wifi, String ssid, String pass, boolean silent) {
         TextView errorView = (TextView) findViewById(R.id.errorV);
         wifi.setWifiEnabled(true);
         WifiConfiguration wifiConf = new WifiConfiguration();
@@ -138,8 +153,8 @@ public class MainActivity extends AppCompatActivity {
         //wifiConf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
         //wifiConf.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
         int res = wifi.addNetwork(wifiConf);
-        if(!silent)
-            errorView.append("add Network returned " + res +"\r\n");
+        if (!silent)
+            errorView.append("add Network returned " + res + "\r\n");
         //boolean b = wifi.enableNetwork(res, true);
         //errorView.append("enableNetwork returned " + b + "\r\n");
         //wifiConf.hiddenSSID = true;
@@ -173,9 +188,10 @@ public class MainActivity extends AppCompatActivity {
         //int res = wifi.addNetwork(wifiConf);
         //wifi.enableNetwork(res, true);
 
-        if(connectToKnownWiFi(wifi, ssid, false)) {
+        if (connectToKnownWiFi(wifi, ssid, false)) {
             return true;
-        }else{
+        } else {
+            wifi.removeNetwork(res);
             return false;
         }
         //wifi.disconnect();
@@ -189,73 +205,5 @@ public class MainActivity extends AppCompatActivity {
         //wifi.removeNetwork(iid);
 
     }
-
-    protected class CrackClass extends AsyncTask<Integer, Integer, Integer>
-    {
-        String passList[] = {"00000000", "87654321", "12345678"};
-        WifiManager wifi = null;
-        String ssid;
-        TextView errorView = null;
-        CrackClass(WifiManager wifi, String ssid)
-        {
-            super();
-            this.wifi = wifi;
-            this.ssid = ssid;
-        }
-
-        @Override
-        protected void onPreExecute()
-        {
-            super.onPreExecute();
-            this.errorView = (TextView) findViewById(R.id.errorV);
-            this.errorView.append("Pre execute settings complete!\r\n");
-
-        }
-        @Override
-        protected Integer doInBackground(Integer... params)
-        {
-            WifiManager wifi = this.wifi;
-            for(String p : this.passList){
-                WifiConfiguration wc = new WifiConfiguration();
-
-                wc.SSID = ("\"" + this.ssid + "\"");
-                wc.preSharedKey = "\"" + p + "\"";
-                int nid = wifi.addNetwork(wc);
-                this.errorView.append("AddNetwork returned: " + nid + "\r\n");
-                //wifi.disconnect();
-                /*
-                this.errorView.append("Disconnected, connecting to new...\r\n");
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }*/
-                boolean rs = wifi.enableNetwork(nid, true);
-                this.errorView.append("enableNetwork returned: " + rs + "\r\n");
-                //rs = wifi.reconnect();
-                //this.errorView.append("Reconnect returned: " + rs + "\r\n");
-
-                this.errorView.append("Getting info\r\n");
-                WifiInfo wInfo = wifi.getConnectionInfo();
-                try {
-                    if (wInfo.getBSSID() != "00:00:00:00:00:00") {
-                        this.errorView.append("Found pass by bssid: " + p + "\r\n");
-                    }
-                }catch(Exception e){
-                    this.errorView.append(e.toString() + "\r\n");
-                    this.errorView.append("Found pass by exception: " + p + "\r\n");
-                }
-                try {
-                    this.errorView.append("Sleeping\r\n");
-                    wifi.removeNetwork(nid);
-                    Thread.sleep(300);
-                }catch (InterruptedException e){
-                    this.errorView.append(e.toString() + "\r\n");
-                }
-            }
-            return null;
-        }
-    }
-
 }
 
