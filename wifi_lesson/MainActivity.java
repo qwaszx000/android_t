@@ -48,31 +48,8 @@ public class MainActivity extends AppCompatActivity {
         EditText ssidEdit = (EditText) findViewById(R.id.ssid);
         wifi.setWifiEnabled(true);
         String ssid = ssidEdit.getText().toString();
-        String passList[] = null;
+        String passList[] = {"00000000", "12345678", "87654321"};
         boolean res = false;
-        try{
-            File android_memory = Environment.getRootDirectory();
-            File f = new File(android_memory, "list.txt");
-            f.setReadable(true);
-            FileInputStream fr = new FileInputStream(f);
-            byte data[] = new byte[(int)f.length()];
-            fr.read(data);
-            fr.close();
-
-            String raw_data = new String(data, "UTF-8");
-            passList = raw_data.split(";");
-
-        } catch (Exception e) {
-            try {
-                FileOutputStream fout = openFileOutput("list.txt", MODE_PRIVATE);
-                OutputStreamWriter owr = new OutputStreamWriter(fout);
-                owr.write("LIST");
-                owr.flush();
-                owr.close();
-            } catch (Exception e2) {
-
-            }
-        }
         for (String i : passList) {
             res = connectToUnknown(wifi, ssid, i, true);
             if(res)
