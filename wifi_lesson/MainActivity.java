@@ -1,7 +1,6 @@
 package com.example.user.wificontroller;
 
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDialogFragment;
@@ -14,15 +13,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.util.Log;
 import org.w3c.dom.Text;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.OutputStreamWriter;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
         EditText ssidEdit = (EditText) findViewById(R.id.ssid);
         wifi.setWifiEnabled(true);
         String ssid = ssidEdit.getText().toString();
-        String passList[] = {"00000000", "12345678", "87654321"};
         boolean res = false;
+        String passList[] = {"00000000", "87654321", "12345678"};
         for (String i : passList) {
             res = connectToUnknown(wifi, ssid, i, true);
             if(res)
@@ -62,8 +56,6 @@ public class MainActivity extends AppCompatActivity {
         for(int i = 0;i<pass_len;i++){
             while(passChars[i] <= 126){
                 if(passChars[i] == 126){
-                    passChars[i] = 32;
-                    passChars[i+1] += 1;
                 }
                 i++;
             }
@@ -98,12 +90,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+
     /*
     Connects to already known host by ssid.
     Returns true if success or false if not
     @param wifi
     @param ssid
      */
+
     boolean connectToKnownWiFi(WifiManager wifi, String ssid, boolean silent) {
         TextView errorView = (TextView) findViewById(R.id.errorV);
         wifi.setWifiEnabled(true);
@@ -126,7 +121,6 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
-
                 }
                 WifiInfo winf = wifi.getConnectionInfo();
                 if (winf.getSupplicantState() == SupplicantState.ASSOCIATED ||
@@ -138,6 +132,8 @@ public class MainActivity extends AppCompatActivity {
         }
         return false;
     }
+
+
 
     /*
     Connects to unknown wifi.
@@ -152,49 +148,9 @@ public class MainActivity extends AppCompatActivity {
         WifiConfiguration wifiConf = new WifiConfiguration();
         wifiConf.SSID = ("\"" + ssid + "\"");
         wifiConf.preSharedKey = ("\"" + pass + "\"");
-        //wifiConf.hiddenSSID = true;
-        //wifiConf.status = WifiConfiguration.Status.ENABLED;
-        //wifiConf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
-        //wifiConf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
-        //wifiConf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
-        //wifiConf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
-        //wifiConf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
-        //wifiConf.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
         int res = wifi.addNetwork(wifiConf);
         if (!silent)
             errorView.append("add Network returned " + res + "\r\n");
-        //boolean b = wifi.enableNetwork(res, true);
-        //errorView.append("enableNetwork returned " + b + "\r\n");
-        //wifiConf.hiddenSSID = true;
-        //wifiConf.status = WifiConfiguration.Status.ENABLED;
-        //wifiConf.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
-        //wifiConf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
-        //wifiConf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
-        //wifiConf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
-        //wifiConf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_EAP);
-        //wifiConf.allowedGroupCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
-        //wifiConf.allowedGroupCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
-        //wifiConf.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
-        //wifiConf.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
-        //wifiConf.wepKeys[0] = ("\""+pass+"\"");
-        //wifiConf.wepTxKeyIndex = 0;
-        //wifiConf.priority = 40;
-        //wifiConf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
-        //wifiConf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
-        //wifiConf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
-        //wifiConf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_EAP);
-        //ifiConf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.IEEE8021X);
-        //wifiConf.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
-        //wifiConf.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
-        //wifiConf.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
-        //wifiConf.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.SHARED);
-        //wifiConf.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.LEAP);
-        //wifiConf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
-        //wifiConf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.NONE);
-        //wifiConf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
-
-        //int res = wifi.addNetwork(wifiConf);
-        //wifi.enableNetwork(res, true);
 
         if (connectToKnownWiFi(wifi, ssid, false)) {
             return true;
@@ -202,16 +158,5 @@ public class MainActivity extends AppCompatActivity {
             wifi.removeNetwork(res);
             return false;
         }
-        //wifi.disconnect();
-        //wifi.enableNetwork(res, true);
-        //wifi.reconnect();
-        /*
-        wifi.disconnect();
-        wifi.enableNetwork(iid, true);
-        wifi.reconnect();
-        */
-        //wifi.removeNetwork(iid);
-
     }
 }
-
