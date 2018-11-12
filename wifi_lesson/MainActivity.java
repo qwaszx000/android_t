@@ -41,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void bruteWiFi(View view) {
+        WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        TextView errorView = (TextView) findViewById(R.id.errorV);
+        EditText ssidEdit = (EditText) findViewById(R.id.ssid);
         boolean readFromDefault = true;
         String FilePassList[] = {};
         String DefaultPassList[] = {"00000000", "87654321", "12345678", "000000000", "123456789", "88888888", "888888888",
@@ -61,11 +64,9 @@ public class MainActivity extends AppCompatActivity {
 
         } catch(Exception e) {
             readFromDefault = true;
+            errorView.append("Cant read file!");
 
         } finally {
-            WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-            TextView errorView = (TextView) findViewById(R.id.errorV);
-            EditText ssidEdit = (EditText) findViewById(R.id.ssid);
             wifi.setWifiEnabled(true);
             String ssid = ssidEdit.getText().toString();
             boolean res = false;
