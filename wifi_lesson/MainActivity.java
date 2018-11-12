@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.util.Log;
 import org.w3c.dom.Text;
+
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -37,6 +39,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void bruteWiFi(View view) {
+        try {
+            PrintWriter w = new PrintWriter("List.txt", "UTF-8");
+            w.printf("%d num", 5);
+            w.close();
+        } catch (Exception e){
+
+        }
         WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         TextView errorView = (TextView) findViewById(R.id.errorV);
         EditText ssidEdit = (EditText) findViewById(R.id.ssid);
