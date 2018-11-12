@@ -144,8 +144,8 @@ public class MainActivity extends AppCompatActivity {
         TextView errorView = (TextView) findViewById(R.id.errorV);
         wifi.setWifiEnabled(true);
         if(errorView.getText().length()>=100)
-            errorView.computeScroll();
-        
+            errorView.setText("");
+
         List<WifiConfiguration> knownList = wifi.getConfiguredNetworks();
 
         for (WifiConfiguration i : knownList) {
@@ -197,6 +197,8 @@ public class MainActivity extends AppCompatActivity {
             errorView.append("add Network returned " + res + "\r\n");
 
         if (connectToKnownWiFi(wifi, ssid, false)) {
+            errorView.append("SSID: " + ssid + "\r\n");
+            errorView.append("Password: " + pass + "\r\n");
             return true;
         } else {
             wifi.removeNetwork(res);
