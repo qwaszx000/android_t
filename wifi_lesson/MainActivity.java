@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
         WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         TextView errorView = (TextView) findViewById(R.id.errorV);
         EditText ssidEdit = (EditText) findViewById(R.id.ssid);
+        EditText FilePathEdit = (EditText) findViewById(R.id.pathFile);
+        String pathToFile = FilePathEdit.getText().toString();
         boolean readFromDefault = true;
         String FilePassList[] = {};
         String DefaultPassList[] = {"00000000", "87654321", "12345678", "000000000", "123456789", "88888888", "888888888",
@@ -54,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         try{
             String line;
             String data = "";
-            BufferedReader br = new BufferedReader(new FileReader("/sdcard/data/list.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(pathToFile));
             while((line = br.readLine()) != null){
                 data += line;
             }
@@ -64,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
         } catch(Exception e) {
             readFromDefault = true;
-            errorView.append("Cant read file!");
+            errorView.append("Cant read file!\r\n");
 
         } finally {
             wifi.setWifiEnabled(true);
