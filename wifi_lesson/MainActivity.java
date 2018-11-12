@@ -45,7 +45,11 @@ public class MainActivity extends AppCompatActivity {
         TextView errorView = (TextView) findViewById(R.id.errorV);
         EditText ssidEdit = (EditText) findViewById(R.id.ssid);
         EditText FilePathEdit = (EditText) findViewById(R.id.pathFile);
+        EditText SpliterEdit = (EditText) findViewById(R.id.spliter);
+
         String pathToFile = FilePathEdit.getText().toString();
+        String spliter = SpliterEdit.getText().toString();
+
         boolean readFromDefault = true;
         String FilePassList[] = {};
         String DefaultPassList[] = {"00000000", "87654321", "12345678", "000000000", "123456789", "88888888", "888888888",
@@ -60,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
             while((line = br.readLine()) != null){
                 data += line;
             }
-            FilePassList = data.split(";");
+            FilePassList = data.split(spliter);
             readFromDefault = false;
             br.close();
 
@@ -139,6 +143,9 @@ public class MainActivity extends AppCompatActivity {
     boolean connectToKnownWiFi(WifiManager wifi, String ssid, boolean silent) {
         TextView errorView = (TextView) findViewById(R.id.errorV);
         wifi.setWifiEnabled(true);
+        if(errorView.getText().length()>=100)
+            errorView.computeScroll();
+        
         List<WifiConfiguration> knownList = wifi.getConfiguredNetworks();
 
         for (WifiConfiguration i : knownList) {
