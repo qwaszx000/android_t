@@ -52,7 +52,8 @@ public class MainActivity extends AppCompatActivity {
 
         boolean res = false;
         String pathToFile = FilePathEdit.getText().toString();
-        String spliter = SpliterEdit.getText().toString();
+        String spliter = null;
+        spliter = SpliterEdit.getText().toString();
 
         boolean readFromDefault = true;
         String FilePassList[] = {};
@@ -65,15 +66,15 @@ public class MainActivity extends AppCompatActivity {
             String line;
             String data = "";
             BufferedReader br = new BufferedReader(new FileReader(pathToFile));
-            if(spliter != "") {//if spliter not null - work by default
-                while ((line = br.readLine()) != null) {
-                    data += line;
-                }
-            } else {
+            if(spliter == "" || spliter == null) {//if spliter null - work
                 while ((line = br.readLine()) != null) {
                     res = connectToUnknown(wifi, ssid, line, true);
                     if (res)
                         return;
+                }
+            } else {
+                while ((line = br.readLine()) != null) {
+                    data += line;
                 }
             }
             FilePassList = data.split(spliter);
