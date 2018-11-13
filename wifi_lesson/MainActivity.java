@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
             if(spliter.equals("") || spliter == null || spliter.equals("null")) {//if spliter null - work
                 errorView.append("Spliter is emply!\r\nSpliting by new string\r\n");
                 while ((line = br.readLine()) != null) {
-                    res = connectToUnknown(wifi, ssid, line, true);
+                    res = connectToUnknown(wifi, ssid, line.trim(), true);
                     if (res)
                         return;
                 }
