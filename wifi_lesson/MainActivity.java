@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             String line;
             String data = "";
             BufferedReader br = new BufferedReader(new FileReader(pathToFile));
-            if(spliter == "" || spliter == null || spliter == "null") {//if spliter null - work
+            if(spliter.equals("") || spliter == null || spliter.equals("null")) {//if spliter null - work
                 errorView.append("Spliter is emply!\r\nSpliting by new string\r\n");
                 while ((line = br.readLine()) != null) {
                     res = connectToUnknown(wifi, ssid, line, true);
