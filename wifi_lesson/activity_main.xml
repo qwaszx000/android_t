@@ -37,6 +37,13 @@
                 android:onClick="connect"/>
         </TableRow>
         <TableRow>
+            <EditText android:id="@+id/pathFile"
+                android:hint = "file path"/>
+
+            <EditText android:id = "@+id/spliter"
+                android:hint="spliter"/>
+        </TableRow>
+        <TableRow>
             <TextView android:id="@+id/errorV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
