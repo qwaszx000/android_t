@@ -61,8 +61,15 @@ public class MainActivity extends AppCompatActivity {
             String line;
             String data = "";
             BufferedReader br = new BufferedReader(new FileReader(pathToFile));
-            while((line = br.readLine()) != null){
-                data += line;
+            if(spliter != "") {//if spliter not null - work by default
+                while ((line = br.readLine()) != null) {
+                    data += line;
+                }
+            } else {//if spliter null - set it to space and add lines withs space spliting
+                spliter = " ";
+                while ((line = br.readLine()) != null) {
+                    data += (line + " ");
+                }
             }
             FilePassList = data.split(spliter);
             readFromDefault = false;
