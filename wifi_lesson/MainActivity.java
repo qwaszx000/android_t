@@ -65,10 +65,11 @@ public class MainActivity extends AppCompatActivity {
                 while ((line = br.readLine()) != null) {
                     data += line;
                 }
-            } else {//if spliter null - set it to space and add lines withs space spliting
-                spliter = " ";
-                while ((line = br.readLine()) != null) {
-                    data += (line + " ");
+            } else {
+                spliter = "\n";
+                char ReadChar = ' ';
+                while ((ReadChar = (char)br.read()) != (char)-1) {
+                    data += (ReadChar);
                 }
             }
             FilePassList = data.split(spliter);
