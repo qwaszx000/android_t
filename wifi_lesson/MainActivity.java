@@ -174,10 +174,24 @@ public class MainActivity extends AppCompatActivity {
                 if (!silent)
                     errorView.append("Reconnect returned:" + rs + "\r\n");
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(200);
                 } catch (InterruptedException e) {
                 }
                 WifiInfo winf = wifi.getConnectionInfo();
+                if(winf.getSupplicantState() == SupplicantState.ASSOCIATING ||
+                        winf.getSupplicantState() == SupplicantState.AUTHENTICATING){
+
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                    }
+                }
+
+                if(winf.getSupplicantState() == SupplicantState.INVALID ||
+                        winf.getSupplicantState() == SupplicantState.DISCONNECTED){
+                    return false;
+                }
+                
                 if (winf.getSupplicantState() == SupplicantState.ASSOCIATED ||
                         winf.getSupplicantState() == SupplicantState.COMPLETED) {
                     errorView.append("Connected!\r\n");
