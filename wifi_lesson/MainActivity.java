@@ -1,24 +1,16 @@
 package com.example.user.wificontroller;
 
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatDialogFragment;
 import android.view.View;
 import android.net.wifi.*;
 import android.content.Context;
-//import android.content.Intent;
-//import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.util.Log;
-import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.PrintWriter;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 
 
@@ -164,7 +156,6 @@ public class MainActivity extends AppCompatActivity {
                 wifi.disconnect();
                 if (!silent)
                     errorView.append("Connecting to " + ("\"" + ssid + "\"\r\n"));
-                //wifi.enableNetwork(i.networkId, false);
 
                 boolean rs = wifi.enableNetwork(i.networkId, true);
                 if (!silent)
@@ -178,12 +169,13 @@ public class MainActivity extends AppCompatActivity {
                 if(winf.getSupplicantState() == SupplicantState.ASSOCIATING ||
                         winf.getSupplicantState() == SupplicantState.AUTHENTICATING ||
                         winf.getSupplicantState() == SupplicantState.COMPLETED){
-
+                    errorView.append("waiting\r\n");
                     Thread.sleep(200);
                 }
 
                 if(winf.getSupplicantState() == SupplicantState.INVALID ||
                         winf.getSupplicantState() == SupplicantState.DISCONNECTED){
+                    errorView.append("invalid\r\n");
                     return false;
                 }
 
