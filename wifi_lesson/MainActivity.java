@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
     boolean connectToKnownWiFi(WifiManager wifi, String ssid, boolean silent) throws InterruptedException {
         TextView errorView = (TextView) findViewById(R.id.errorV);
         wifi.setWifiEnabled(true);
-        if(errorView.getText().length()>=100)
+        if(errorView.getText().length()>=80)
             errorView.setText("");
 
         List<WifiConfiguration> knownList = wifi.getConfiguredNetworks();
