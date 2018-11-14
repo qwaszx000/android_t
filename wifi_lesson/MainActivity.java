@@ -179,7 +179,8 @@ public class MainActivity extends AppCompatActivity {
                     return false;
                 }
 
-                if (winf.getSupplicantState() == SupplicantState.ASSOCIATED) {
+                if (winf.getSupplicantState() == SupplicantState.ASSOCIATED ||
+                        winf.getSupplicantState() == SupplicantState.COMPLETED) {
                     errorView.append("Connected!\r\n");
                     return true;
                 } else {
