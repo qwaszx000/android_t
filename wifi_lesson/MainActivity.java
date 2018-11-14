@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         wifi.setWifiEnabled(false);
     }
 
-    public void bruteWiFi(View view) {
+    public void bruteWiFi(View view) throws InterruptedException {
         WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         wifi.setWifiEnabled(true);
 
@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
     @param ssid
      */
 
-    boolean connectToKnownWiFi(WifiManager wifi, String ssid, boolean silent) {
+    boolean connectToKnownWiFi(WifiManager wifi, String ssid, boolean silent) throws InterruptedException {
         TextView errorView = (TextView) findViewById(R.id.errorV);
         wifi.setWifiEnabled(true);
         if(errorView.getText().length()>=100)
@@ -173,19 +173,13 @@ public class MainActivity extends AppCompatActivity {
                 rs = wifi.reconnect();
                 if (!silent)
                     errorView.append("Reconnect returned:" + rs + "\r\n");
-                try {
-                    Thread.sleep(200);
-                } catch (InterruptedException e) {
-                }
+                Thread.sleep(200);
                 WifiInfo winf = wifi.getConnectionInfo();
                 if(winf.getSupplicantState() == SupplicantState.ASSOCIATING ||
                         winf.getSupplicantState() == SupplicantState.AUTHENTICATING ||
                         winf.getSupplicantState() == SupplicantState.COMPLETED){
 
-                    try {
-                        Thread.sleep(200);
-                    } catch (InterruptedException e) {
-                    }
+                    Thread.sleep(200);
                 }
 
                 if(winf.getSupplicantState() == SupplicantState.INVALID ||
@@ -213,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
     @param ssid
     @param pass
      */
-    boolean connectToUnknown(WifiManager wifi, String ssid, String pass, boolean silent) {
+    boolean connectToUnknown(WifiManager wifi, String ssid, String pass, boolean silent) throws InterruptedException {
         TextView errorView = (TextView) findViewById(R.id.errorV);
         wifi.setWifiEnabled(true);
         WifiConfiguration wifiConf = new WifiConfiguration();
