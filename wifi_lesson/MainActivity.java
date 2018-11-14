@@ -182,7 +182,8 @@ public class MainActivity extends AppCompatActivity {
                             state == SupplicantState.DISCONNECTED ||
                             state == SupplicantState.INACTIVE ||
                             state == SupplicantState.INTERFACE_DISABLED ||
-                            state == SupplicantState.UNINITIALIZED) {
+                            state == SupplicantState.UNINITIALIZED ||
+                            state == SupplicantState.ASSOCIATED) {
                         errorView.append("invalid\r\n");
                         return false;
                     }
