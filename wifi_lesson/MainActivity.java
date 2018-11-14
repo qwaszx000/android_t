@@ -179,7 +179,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 WifiInfo winf = wifi.getConnectionInfo();
                 if(winf.getSupplicantState() == SupplicantState.ASSOCIATING ||
-                        winf.getSupplicantState() == SupplicantState.AUTHENTICATING){
+                        winf.getSupplicantState() == SupplicantState.AUTHENTICATING ||
+                        winf.getSupplicantState() == SupplicantState.COMPLETED){
 
                     try {
                         Thread.sleep(200);
@@ -191,11 +192,12 @@ public class MainActivity extends AppCompatActivity {
                         winf.getSupplicantState() == SupplicantState.DISCONNECTED){
                     return false;
                 }
-                
-                if (winf.getSupplicantState() == SupplicantState.ASSOCIATED ||
-                        winf.getSupplicantState() == SupplicantState.COMPLETED) {
+
+                if (winf.getSupplicantState() == SupplicantState.ASSOCIATED) {
                     errorView.append("Connected!\r\n");
                     return true;
+                } else {
+                    return false;
                 }
             }
         }
