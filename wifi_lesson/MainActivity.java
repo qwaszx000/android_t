@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
                 rs = wifi.reconnect();
                 if (!silent)
                     errorView.append("Reconnect returned:" + rs + "\r\n");
-                Thread.sleep(200);
+                Thread.sleep(100);
                 WifiInfo winf = wifi.getConnectionInfo();
                 SupplicantState state;
                 state = winf.getSupplicantState();
@@ -210,14 +210,50 @@ public class MainActivity extends AppCompatActivity {
     boolean connectToUnknown(WifiManager wifi, String ssid, String pass, boolean silent) throws InterruptedException {
         TextView errorView = (TextView) findViewById(R.id.errorV);
         wifi.setWifiEnabled(true);
+        boolean isGood = false;
         WifiConfiguration wifiConf = new WifiConfiguration();
         wifiConf.SSID = ("\"" + ssid + "\"");
         wifiConf.preSharedKey = ("\"" + pass + "\"");
         int res = wifi.addNetwork(wifiConf);
         if (!silent)
             errorView.append("add Network returned " + res + "\r\n");
+        ///*
+        wifi.disconnect();
+        wifi.enableNetwork(res, true);
+        wifi.reconnect();
 
-        if (connectToKnownWiFi(wifi, ssid, false)) {
+        Thread.sleep(100);
+        WifiInfo winf = wifi.getConnectionInfo();
+        SupplicantState state;
+        state = winf.getSupplicantState();
+
+        if (state == SupplicantState.ASSOCIATING ||
+                state == SupplicantState.AUTHENTICATING ||
+                state == SupplicantState.GROUP_HANDSHAKE ||
+                state == SupplicantState.FOUR_WAY_HANDSHAKE ||
+                state == SupplicantState.SCANNING) {
+            errorView.append("waiting\r\n");
+            Thread.sleep(200);
+        }
+
+        if (state == SupplicantState.INVALID ||
+                state == SupplicantState.DISCONNECTED ||
+                state == SupplicantState.INACTIVE ||
+                state == SupplicantState.INTERFACE_DISABLED ||
+                state == SupplicantState.UNINITIALIZED ||
+                state == SupplicantState.ASSOCIATED ||
+                state == SupplicantState.DORMANT) {
+            errorView.append("invalid\r\n");
+            isGood = false;
+        }
+
+        if (state == SupplicantState.COMPLETED) {//COMPLETED - good
+            errorView.append("Connected!\r\n");
+            errorView.append(state.toString() + "\r\n");
+            isGood = true;
+        }
+        //*/
+        if (isGood){//connectToKnownWiFi(wifi, ssid, false)) {
             errorView.append("SSID: " + ssid + "\r\n");
             errorView.append("Password: " + pass + "\r\n");
             return true;
