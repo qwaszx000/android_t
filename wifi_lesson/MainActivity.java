@@ -183,13 +183,13 @@ public class MainActivity extends AppCompatActivity {
                             state == SupplicantState.INACTIVE ||
                             state == SupplicantState.INTERFACE_DISABLED ||
                             state == SupplicantState.UNINITIALIZED ||
-                            state == SupplicantState.ASSOCIATED) {
+                            state == SupplicantState.ASSOCIATED ||
+                            state == SupplicantState.DORMANT) {
                         errorView.append("invalid\r\n");
                         return false;
                     }
 
-                    if (//state == SupplicantState.ASSOCIATED ||//ASSOCIATED - bad
-                            state == SupplicantState.COMPLETED) {//COMPLETED - good
+                    if (state == SupplicantState.COMPLETED) {//COMPLETED - good
                         errorView.append("Connected!\r\n");
                         errorView.append(state.toString() + "\r\n");
                         return true;
