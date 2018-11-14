@@ -167,33 +167,31 @@ public class MainActivity extends AppCompatActivity {
                 Thread.sleep(200);
                 WifiInfo winf = wifi.getConnectionInfo();
                 SupplicantState state;
-                while(true) {
-                    state = winf.getSupplicantState();
-                    if (state == SupplicantState.ASSOCIATING ||
-                            state == SupplicantState.AUTHENTICATING ||
-                            state == SupplicantState.GROUP_HANDSHAKE ||
-                            state == SupplicantState.FOUR_WAY_HANDSHAKE ||
-                            state == SupplicantState.SCANNING) {
+                state = winf.getSupplicantState();
+                if (state == SupplicantState.ASSOCIATING ||
+                        state == SupplicantState.AUTHENTICATING ||
+                        state == SupplicantState.GROUP_HANDSHAKE ||
+                        state == SupplicantState.FOUR_WAY_HANDSHAKE ||
+                        state == SupplicantState.SCANNING) {
                         errorView.append("waiting\r\n");
-                        Thread.sleep(50);
-                    }
+                        Thread.sleep(200);
+                }
 
-                    if (state == SupplicantState.INVALID ||
-                            state == SupplicantState.DISCONNECTED ||
-                            state == SupplicantState.INACTIVE ||
-                            state == SupplicantState.INTERFACE_DISABLED ||
-                            state == SupplicantState.UNINITIALIZED ||
-                            state == SupplicantState.ASSOCIATED ||
-                            state == SupplicantState.DORMANT) {
-                        errorView.append("invalid\r\n");
-                        return false;
-                    }
+                if (state == SupplicantState.INVALID ||
+                        state == SupplicantState.DISCONNECTED ||
+                        state == SupplicantState.INACTIVE ||
+                        state == SupplicantState.INTERFACE_DISABLED ||
+                        state == SupplicantState.UNINITIALIZED ||
+                        state == SupplicantState.ASSOCIATED ||
+                        state == SupplicantState.DORMANT) {
+                    errorView.append("invalid\r\n");
+                    return false;
+                }
 
-                    if (state == SupplicantState.COMPLETED) {//COMPLETED - good
-                        errorView.append("Connected!\r\n");
-                        errorView.append(state.toString() + "\r\n");
-                        return true;
-                    }
+                if (state == SupplicantState.COMPLETED) {//COMPLETED - good
+                    errorView.append("Connected!\r\n");
+                    errorView.append(state.toString() + "\r\n");
+                    return true;
                 }
             }
         }
