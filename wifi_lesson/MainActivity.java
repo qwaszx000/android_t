@@ -170,13 +170,19 @@ public class MainActivity extends AppCompatActivity {
                 while(true) {
                     state = winf.getSupplicantState();
                     if (state == SupplicantState.ASSOCIATING ||
-                            state == SupplicantState.AUTHENTICATING) {
+                            state == SupplicantState.AUTHENTICATING ||
+                            state == SupplicantState.GROUP_HANDSHAKE ||
+                            state == SupplicantState.FOUR_WAY_HANDSHAKE ||
+                            state == SupplicantState.SCANNING) {
                         errorView.append("waiting\r\n");
-                        Thread.sleep(200);
+                        Thread.sleep(50);
                     }
 
                     if (state == SupplicantState.INVALID ||
-                            state == SupplicantState.DISCONNECTED) {
+                            state == SupplicantState.DISCONNECTED ||
+                            state == SupplicantState.INACTIVE ||
+                            state == SupplicantState.INTERFACE_DISABLED ||
+                            state == SupplicantState.UNINITIALIZED) {
                         errorView.append("invalid\r\n");
                         return false;
                     }
