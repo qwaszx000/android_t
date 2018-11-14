@@ -167,27 +167,26 @@ public class MainActivity extends AppCompatActivity {
                 Thread.sleep(200);
                 WifiInfo winf = wifi.getConnectionInfo();
                 SupplicantState state;
-                state = winf.getSupplicantState();
-                if(state == SupplicantState.ASSOCIATING ||
-                        state == SupplicantState.AUTHENTICATING ||
-                        state == SupplicantState.COMPLETED){
-                    errorView.append("waiting\r\n");
-                    Thread.sleep(200);
-                }
+                while(true) {
+                    state = winf.getSupplicantState();
+                    if (state == SupplicantState.ASSOCIATING ||
+                            state == SupplicantState.AUTHENTICATING) {
+                        errorView.append("waiting\r\n");
+                        Thread.sleep(200);
+                    }
 
-                if(state == SupplicantState.INVALID ||
-                        state == SupplicantState.DISCONNECTED){
-                    errorView.append("invalid\r\n");
-                    return false;
-                }
+                    if (state == SupplicantState.INVALID ||
+                            state == SupplicantState.DISCONNECTED) {
+                        errorView.append("invalid\r\n");
+                        return false;
+                    }
 
-                if (state == SupplicantState.ASSOCIATED ||
-                        state == SupplicantState.COMPLETED) {
-                    errorView.append("Connected!\r\n");
-                    errorView.append(state.toString() + "\r\n");
-                    return true;
-                } else {
-                    return false;
+                    if (//state == SupplicantState.ASSOCIATED ||//ASSOCIATED - bad
+                            state == SupplicantState.COMPLETED) {//COMPLETED - good
+                        errorView.append("Connected!\r\n");
+                        errorView.append(state.toString() + "\r\n");
+                        return true;
+                    }
                 }
             }
         }
