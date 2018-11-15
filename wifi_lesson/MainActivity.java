@@ -82,8 +82,6 @@ public class MainActivity extends AppCompatActivity {
 
             if (state == SupplicantState.ASSOCIATING ||
                     state == SupplicantState.AUTHENTICATING ||
-                    state == SupplicantState.GROUP_HANDSHAKE ||
-                    state == SupplicantState.FOUR_WAY_HANDSHAKE ||
                     state == SupplicantState.SCANNING) {
                 publishProgress("waiting\r\n");
                 Thread.sleep(500);
@@ -101,7 +99,9 @@ public class MainActivity extends AppCompatActivity {
                     state == SupplicantState.INTERFACE_DISABLED ||
                     state == SupplicantState.UNINITIALIZED ||
                     state == SupplicantState.ASSOCIATED ||
-                    state == SupplicantState.DORMANT) {
+                    state == SupplicantState.DORMANT ||
+                    state == SupplicantState.GROUP_HANDSHAKE ||
+                    state == SupplicantState.FOUR_WAY_HANDSHAKE) {
                 publishProgress("invalid\r\n");
                 isGood = false;
             }
