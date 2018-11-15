@@ -79,18 +79,17 @@ public class MainActivity extends AppCompatActivity {
             SupplicantState state;
             state = winf.getSupplicantState();
             publishProgress(state.toString() + "\r\n");
-            
+
             if (state == SupplicantState.ASSOCIATING ||
                     state == SupplicantState.AUTHENTICATING ||
                     state == SupplicantState.GROUP_HANDSHAKE ||
                     state == SupplicantState.FOUR_WAY_HANDSHAKE ||
                     state == SupplicantState.SCANNING) {
                 publishProgress("waiting\r\n");
-                Thread.sleep(200);
+                Thread.sleep(500);
             }
             Thread.sleep(200);
             if (state == SupplicantState.INVALID ||
-                    state == SupplicantState.DISCONNECTED ||
                     state == SupplicantState.INACTIVE ||
                     state == SupplicantState.INTERFACE_DISABLED ||
                     state == SupplicantState.UNINITIALIZED ||
@@ -98,6 +97,17 @@ public class MainActivity extends AppCompatActivity {
                     state == SupplicantState.DORMANT) {
                 publishProgress("invalid\r\n");
                 isGood = false;
+            }
+
+            if(state == SupplicantState.DISCONNECTED){
+                Thread.sleep(10000);//10 seconds
+                isGood = connectToUnknownB(wifi, ssid, pass, true);//redo
+                if(isGood) {
+                    return true;
+                } else {
+                    wifi.removeNetwork(res);
+                    return false;
+                }
             }
 
             if (state == SupplicantState.COMPLETED) {//COMPLETED - good
