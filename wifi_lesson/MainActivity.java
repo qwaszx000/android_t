@@ -78,7 +78,8 @@ public class MainActivity extends AppCompatActivity {
             WifiInfo winf = wifi.getConnectionInfo();
             SupplicantState state;
             state = winf.getSupplicantState();
-
+            publishProgress(state.toString() + "\r\n");
+            
             if (state == SupplicantState.ASSOCIATING ||
                     state == SupplicantState.AUTHENTICATING ||
                     state == SupplicantState.GROUP_HANDSHAKE ||
@@ -101,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
 
             if (state == SupplicantState.COMPLETED) {//COMPLETED - good
                 publishProgress("Connected!\r\n");
-                publishProgress(state.toString() + "\r\n");
                 isGood = true;
             }
             //*/
@@ -394,7 +394,7 @@ public class MainActivity extends AppCompatActivity {
         SupplicantState state;
         state = winf.getSupplicantState();
         errorView.append(state.toString() + "\r\n");
-        
+
         if (state == SupplicantState.ASSOCIATING ||
                 state == SupplicantState.AUTHENTICATING ||
                 state == SupplicantState.GROUP_HANDSHAKE ||
