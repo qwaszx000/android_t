@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
     boolean connectToKnownWiFi(WifiManager wifi, String ssid, boolean silent) throws InterruptedException {
         TextView errorView = (TextView) findViewById(R.id.errorV);
         wifi.setWifiEnabled(true);
-        if(errorView.getText().length()>=80)
+        if(errorView.getText().length()>=50)
             errorView.setText("");
 
         List<WifiConfiguration> knownList = wifi.getConfiguredNetworks();
@@ -210,10 +210,13 @@ public class MainActivity extends AppCompatActivity {
     boolean connectToUnknown(WifiManager wifi, String ssid, String pass, boolean silent) throws InterruptedException {
         TextView errorView = (TextView) findViewById(R.id.errorV);
         wifi.setWifiEnabled(true);
+        if(errorView.getText().length()>=50)
+            errorView.setText("");
         boolean isGood = false;
         WifiConfiguration wifiConf = new WifiConfiguration();
         wifiConf.SSID = ("\"" + ssid + "\"");
-        wifiConf.preSharedKey = ("\"" + pass + "\"");
+        if(!pass.equals(""))
+            wifiConf.preSharedKey = ("\"" + pass + "\"");
         int res = wifi.addNetwork(wifiConf);
         if (!silent)
             errorView.append("add Network returned " + res + "\r\n");
@@ -222,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
         wifi.enableNetwork(res, true);
         wifi.reconnect();
 
-        Thread.sleep(100);
+        Thread.sleep(300);
         WifiInfo winf = wifi.getConnectionInfo();
         SupplicantState state;
         state = winf.getSupplicantState();
