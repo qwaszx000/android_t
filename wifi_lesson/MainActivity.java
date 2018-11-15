@@ -44,8 +44,9 @@ public class MainActivity extends AppCompatActivity {
     public void bruteWiFi(View view) throws InterruptedException {
         //doBrute();
         Bruter task = new Bruter();
-        Thread thread = new Thread(task);
-        thread.start();
+        //Thread thread = new Thread(task);
+        //thread.start();
+        task.run();
         //Runnable task = (Runnable) doBrute(wifi);
         /*
         int pass_len = 8;
