@@ -393,7 +393,8 @@ public class MainActivity extends AppCompatActivity {
         WifiInfo winf = wifi.getConnectionInfo();
         SupplicantState state;
         state = winf.getSupplicantState();
-
+        errorView.append(state.toString() + "\r\n");
+        
         if (state == SupplicantState.ASSOCIATING ||
                 state == SupplicantState.AUTHENTICATING ||
                 state == SupplicantState.GROUP_HANDSHAKE ||
@@ -416,7 +417,6 @@ public class MainActivity extends AppCompatActivity {
 
         if (state == SupplicantState.COMPLETED) {//COMPLETED - good
             errorView.append("Connected!\r\n");
-            errorView.append(state.toString() + "\r\n");
             isGood = true;
         }
         //*/
