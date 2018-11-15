@@ -87,6 +87,13 @@ public class MainActivity extends AppCompatActivity {
                     state == SupplicantState.SCANNING) {
                 publishProgress("waiting\r\n");
                 Thread.sleep(500);
+                isGood = connectToUnknownB(wifi, ssid, pass, true);//redo
+                if(isGood) {
+                    return true;
+                } else {
+                    wifi.removeNetwork(res);
+                    return false;
+                }
             }
             Thread.sleep(200);
             if (state == SupplicantState.INVALID ||
