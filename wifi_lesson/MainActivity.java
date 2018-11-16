@@ -81,8 +81,7 @@ public class MainActivity extends AppCompatActivity {
             publishProgress(state.toString() + "\r\n");
 
             if (state == SupplicantState.ASSOCIATING ||
-                    state == SupplicantState.AUTHENTICATING ||
-                    state == SupplicantState.SCANNING) {
+                    state == SupplicantState.AUTHENTICATING) {
                 publishProgress("waiting\r\n");
                 Thread.sleep(500);
                 isGood = connectToUnknownB(wifi, ssid, pass, true);//redo
@@ -101,7 +100,8 @@ public class MainActivity extends AppCompatActivity {
                     state == SupplicantState.ASSOCIATED ||
                     state == SupplicantState.DORMANT ||
                     state == SupplicantState.GROUP_HANDSHAKE ||
-                    state == SupplicantState.FOUR_WAY_HANDSHAKE) {
+                    state == SupplicantState.FOUR_WAY_HANDSHAKE  ||
+                    state == SupplicantState.SCANNING) {
                 publishProgress("invalid\r\n");
                 isGood = false;
             }
