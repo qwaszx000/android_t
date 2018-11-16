@@ -15,13 +15,18 @@
                 android:onClick="enableWiFi"
                 />
             <Button
+                android:text="Disable WiFi"
+                android:onClick="disableWiFi"
+                />
+        </TableRow>
+        <TableRow>
+            <Button
                 android:text="Brute WiFi"
                 android:onClick="bruteWiFi"
                 />
             <Button
-                android:text="Disable WiFi"
-                android:onClick="disableWiFi"
-                />
+                android:text="Stop brute"
+                android:onClick="stopBrute"/>
         </TableRow>
         <TableRow>
             <EditText android:id="@+id/ssid"

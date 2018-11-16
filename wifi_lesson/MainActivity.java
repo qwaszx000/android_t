@@ -16,6 +16,7 @@ import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
+    Bruter task;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,9 +82,11 @@ public class MainActivity extends AppCompatActivity {
             publishProgress(state.toString() + "\r\n");
 
             if (state == SupplicantState.ASSOCIATING ||
-                    state == SupplicantState.AUTHENTICATING) {
+                    state == SupplicantState.AUTHENTICATING  ||
+                    state == SupplicantState.SCANNING) {
                 publishProgress("waiting\r\n");
                 Thread.sleep(500);
+                wifi.removeNetwork(res);
                 isGood = connectToUnknownB(wifi, ssid, pass, true);//redo
                 if(isGood) {
                     return true;
@@ -100,8 +103,7 @@ public class MainActivity extends AppCompatActivity {
                     state == SupplicantState.ASSOCIATED ||
                     state == SupplicantState.DORMANT ||
                     state == SupplicantState.GROUP_HANDSHAKE ||
-                    state == SupplicantState.FOUR_WAY_HANDSHAKE  ||
-                    state == SupplicantState.SCANNING) {
+                    state == SupplicantState.FOUR_WAY_HANDSHAKE) {
                 publishProgress("invalid\r\n");
                 isGood = false;
             }
@@ -203,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
     };
     public void bruteWiFi(View view) throws InterruptedException {
         //doBrute();
-        Bruter task = new Bruter();
+        task = new Bruter();
         task.execute();
         //Thread thread = new Thread(task);
         //thread.start();
@@ -221,6 +223,11 @@ public class MainActivity extends AppCompatActivity {
                 i++;
             }
         }*/
+    }
+
+    public void stopBrute(View view)
+    {
+        task.cancel(true);
     }
 
     public void doBrute() throws InterruptedException {
