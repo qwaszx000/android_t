@@ -25,21 +25,25 @@
         android:id="@+id/PortText"
         android:layout_width="126dp"
         android:layout_height="46dp"
-        android:layout_marginTop="68dp"
-        android:layout_marginEnd="268dp"
-        android:layout_marginRight="268dp"
+        android:layout_marginStart="17dp"
+        android:layout_marginLeft="17dp"
+        android:layout_marginTop="7dp"
         android:ems="10"
         android:hint="Port"
         android:inputType="number"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TargetText" />
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="180dp"
         android:layout_height="400dp"
         android:layout_marginStart="19dp"
         android:layout_marginLeft="19dp"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintEnd_toStartOf="@+id/scrollView3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/SendButton">
 
@@ -59,6 +63,8 @@
         android:id="@+id/SendButton"
         android:layout_width="286dp"
         android:layout_height="49dp"
+        android:layout_marginStart="41dp"
+        android:layout_marginLeft="41dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="84dp"
         android:layout_marginRight="84dp"
@@ -66,16 +72,21 @@
         android:onClick="sendData"
         android:text="Send"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ConnectButton" />
 
 
     <ScrollView
+        android:id="@+id/scrollView3"
         android:layout_width="180dp"
         android:layout_height="400dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="26dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/scrollView2"
         app:layout_constraintTop_toBottomOf="@+id/SendButton">
 
         <EditText
@@ -106,26 +117,26 @@
         android:id="@+id/DisconnectButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="157dp"
+        android:layout_marginTop="41dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:enabled="false"
         android:onClick="closeConnection"
         android:text="Close connection"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/ClearLogsButton" />
 
     <CheckBox
         android:id="@+id/UDPbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="296dp"
-        android:layout_marginLeft="296dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="29dp"
+        android:layout_marginRight="29dp"
         android:checked="false"
         android:onClick="checkUDPchange"
         android:text="Use UDP"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
