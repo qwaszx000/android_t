@@ -7,6 +7,7 @@ import android.widget.EditText;
 import android.widget.Button;
 import android.widget.CheckBox;
 //io
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -17,6 +18,8 @@ import java.net.InetAddress;
 import java.net.DatagramSocket;
 import java.net.DatagramPacket;
 import java.net.Socket;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private Button ConnectBtn = null;
     private Button DisconnectBtn = null;
     private CheckBox UDPCheck = null;
-    
+
     private Boolean udp = false;
     private InetAddress target = null;
     private int targetPort = 0;
@@ -76,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
 
     //Connect to target(tcp only)
     public void connect(android.view.View v){
-        targetPort = Integer.parseInt(TargetPortEdit.getText().toString());
         ConnectBtn.setEnabled(false);
         DisconnectBtn.setEnabled(true);
         SendBtn.setEnabled(true);
@@ -84,14 +86,23 @@ public class MainActivity extends AppCompatActivity {
         //connect to target
         try{
             target = InetAddress.getByName(TargetText.getText().toString());
-            socket = new Socket(target.getHostAddress(), targetPort);
+            targetPort = Integer.parseInt(TargetPortEdit.getText().toString());
+            socket = new Socket(target, targetPort);
             if(socket.isConnected()){
+                ResponseEdit.append("Successful connect\n");
                 out = socket.getOutputStream();
                 output = new PrintWriter(out);
                 in = socket.getInputStream();
             }
-        } catch(Exception e){
-            ResponseEdit.append("Host not found\n"+e.getMessage());
+        } catch(UnknownHostException e){
+            ResponseEdit.append("Host not found: "+e.getMessage()+"\n");
+            //enable disabled buttons if have error
+            ConnectBtn.setEnabled(true);
+            DisconnectBtn.setEnabled(false);
+            SendBtn.setEnabled(false);
+            UDPCheck.setEnabled(true);
+        } catch(IOException e){
+            ResponseEdit.append("IOException: "+e.getMessage()+"\n");
             //enable disabled buttons if have error
             ConnectBtn.setEnabled(true);
             DisconnectBtn.setEnabled(false);
@@ -111,8 +122,8 @@ public class MainActivity extends AppCompatActivity {
             out.close();
             in.close();
             ResponseEdit.append("Closed\n");
-        } catch(Exception e){
-            ResponseEdit.append("Closing error\n"+e.getMessage());
+        } catch(IOException e){
+            ResponseEdit.append("Closing error"+e.getMessage()+"\n");
             //don`t closed, so try again
             ConnectBtn.setEnabled(false);
             DisconnectBtn.setEnabled(true);
@@ -130,13 +141,13 @@ public class MainActivity extends AppCompatActivity {
             while ((line = reader.readLine()) != null) {
                 sb.append(line).append('\n');
             }
-        } catch (Exception e) {
-            ResponseEdit.append("Error: " + e.getMessage());
+        } catch (IOException e) {
+            ResponseEdit.append("Error: " + e.getMessage()+"\n");
         } finally {
             try {
                 is.close();
-            } catch (Exception e) {
-                ResponseEdit.append("Error: " + e.getMessage());
+            } catch (IOException e) {
+                ResponseEdit.append("Error: " + e.getMessage()+"\n");
             }
         }
         return sb.toString();
@@ -156,8 +167,12 @@ public class MainActivity extends AppCompatActivity {
                 s.send(p);
                 //Todo get response
                 s.close();
-            } catch(Exception e){
-                ResponseEdit.append("Sending udp error\n"+e.getMessage());
+            } catch(SocketException e){
+                ResponseEdit.append("Sending udp error: "+e.getMessage()+"\n");
+            } catch(UnknownHostException e){
+                ResponseEdit.append("Unknown host error: "+e.getMessage()+"\n");
+            } catch(IOException e){
+                ResponseEdit.append("IO error: "+e.getMessage()+"\n");
             }
         } else { //send data by tcp
             try {
@@ -165,8 +180,8 @@ public class MainActivity extends AppCompatActivity {
                 out.flush();
                 response = convertStreamToString(in);
                 ResponseEdit.append(response);
-            } catch(Exception e){
-                ResponseEdit.append("Sending tcp error\n"+e.getMessage());
+            } catch(IOException e){
+                ResponseEdit.append("Sending tcp error: "+e.getMessage()+"\n");
             }
         }
     }

@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="72dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="Target name or ip"
         android:importantForAutofill="no"
@@ -25,9 +25,9 @@
         android:id="@+id/PortText"
         android:layout_width="126dp"
         android:layout_height="46dp"
-        android:layout_marginTop="72dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
+        android:layout_marginTop="68dp"
+        android:layout_marginEnd="268dp"
+        android:layout_marginRight="268dp"
         android:ems="10"
         android:hint="Port"
         android:inputType="number"
@@ -96,19 +96,19 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginLeft="40dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="42dp"
         android:onClick="connect"
         android:text="Connect"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/UDPbox" />
+        app:layout_constraintTop_toBottomOf="@+id/PortText" />
 
     <Button
         android:id="@+id/DisconnectButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="164dp"
-        android:layout_marginEnd="124dp"
-        android:layout_marginRight="124dp"
+        android:layout_marginTop="157dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:enabled="false"
         android:onClick="closeConnection"
         android:text="Close connection"
@@ -119,25 +119,25 @@
         android:id="@+id/UDPbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginLeft="36dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="296dp"
+        android:layout_marginLeft="296dp"
+        android:layout_marginTop="16dp"
         android:checked="false"
         android:onClick="checkUDPchange"
         android:text="Use UDP"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TargetText" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/ClearLogsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginRight="28dp"
         android:onClick="clearAll"
         android:text="Clear"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/PortText" />
+        app:layout_constraintTop_toBottomOf="@+id/UDPbox" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
