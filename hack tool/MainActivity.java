@@ -19,15 +19,17 @@ import java.net.DatagramPacket;
 import java.net.Socket;
 
 public class MainActivity extends AppCompatActivity {
-    private EditText TargetText = (EditText) findViewById(R.id.TargetText);
-    private EditText TargetPortEdit = (EditText) findViewById(R.id.PortText);
-    private EditText DataEdit = (EditText) findViewById(R.id.DataText);
-    private EditText ResponseEdit = (EditText) findViewById(R.id.ResponseText);
-    private Button SendBtn = (Button) findViewById(R.id.SendButton);
-    private Button ConnectBtn = (Button) findViewById(R.id.ConnectButton);
-    private Button DisconnectBtn = (Button) findViewById(R.id.DisconnectButton);
-    private CheckBox UDPCheck = (CheckBox) findViewById(R.id.UDPbox);
 
+    private EditText TargetText = null;
+    private EditText TargetPortEdit = null;
+    private EditText DataEdit = null;
+    private EditText ResponseEdit = null;
+
+    private Button SendBtn = null;
+    private Button ConnectBtn = null;
+    private Button DisconnectBtn = null;
+    private CheckBox UDPCheck = null;
+    
     private Boolean udp = false;
     private InetAddress target = null;
     private int targetPort = 0;
@@ -40,6 +42,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //widgets
+        TargetText = (EditText) findViewById(R.id.TargetText);
+        TargetPortEdit = (EditText) findViewById(R.id.PortText);
+        DataEdit = (EditText) findViewById(R.id.DataText);
+        ResponseEdit = (EditText) findViewById(R.id.ResponseText);
+        SendBtn = (Button) findViewById(R.id.SendButton);
+        ConnectBtn = (Button) findViewById(R.id.ConnectButton);
+        DisconnectBtn = (Button) findViewById(R.id.DisconnectButton);
+        UDPCheck = (CheckBox) findViewById(R.id.UDPbox);
     }
 
     //UDPbox change
