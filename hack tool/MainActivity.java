@@ -28,9 +28,9 @@ public class MainActivity extends AppCompatActivity {
     private Button DisconnectBtn = (Button) findViewById(R.id.DisconnectButton);
     private CheckBox UDPCheck = (CheckBox) findViewById(R.id.UDPbox);
 
-    private Boolean udp = UDPCheck.isChecked();
+    private Boolean udp = false;
     private InetAddress target = null;
-    private int targetPort = Integer.parseInt(TargetPortEdit.getText().toString());
+    private int targetPort = 0;
     private Socket socket = null;
     private OutputStream out = null;
     private PrintWriter output = null;
@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
     //UDPbox change
     public void checkUDPchange(android.view.View v){
+        udp = UDPCheck.isChecked();
         //use udp
         if(udp){
             ConnectBtn.setEnabled(false);
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Connect to target(tcp only)
     public void connect(android.view.View v){
+        targetPort = Integer.parseInt(TargetPortEdit.getText().toString());
         ConnectBtn.setEnabled(false);
         DisconnectBtn.setEnabled(true);
         SendBtn.setEnabled(true);
@@ -131,6 +133,8 @@ public class MainActivity extends AppCompatActivity {
 
     //send data to target
     public void sendData(android.view.View v){
+        udp = UDPCheck.isChecked();
+        targetPort = Integer.parseInt(TargetPortEdit.getText().toString());
         String data = DataEdit.getText().toString();
         String response = "";
         if(udp){ //send data by udp
