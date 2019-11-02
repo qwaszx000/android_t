@@ -2,6 +2,7 @@ package com.kwas.hacktool;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 //widget
 import android.widget.EditText;
 import android.widget.Button;
@@ -95,21 +96,21 @@ public class MainActivity extends AppCompatActivity {
                 in = socket.getInputStream();
             }
         } catch(UnknownHostException e){
-            ResponseEdit.append("Host not found: "+e.getStackTrace().toString()+"\n");
+            ResponseEdit.append("Host not found: "+Log.getStackTraceString(e)+"\n");
             //enable disabled buttons if have error
             ConnectBtn.setEnabled(true);
             DisconnectBtn.setEnabled(false);
             SendBtn.setEnabled(false);
             UDPCheck.setEnabled(true);
         } catch(IOException e){
-            ResponseEdit.append("IOException: "+e.getStackTrace().toString()+"\n");
+            ResponseEdit.append("IOException: "+Log.getStackTraceString(e)+"\n");
             //enable disabled buttons if have error
             ConnectBtn.setEnabled(true);
             DisconnectBtn.setEnabled(false);
             SendBtn.setEnabled(false);
             UDPCheck.setEnabled(true);
         } catch(Exception e){
-            ResponseEdit.append("Exception: "+e.getStackTrace().toString()+"\n");
+            ResponseEdit.append("Exception: "+Log.getStackTraceString(e)+"\n");
             //enable disabled buttons if have error
             ConnectBtn.setEnabled(true);
             DisconnectBtn.setEnabled(false);
@@ -130,13 +131,13 @@ public class MainActivity extends AppCompatActivity {
             in.close();
             ResponseEdit.append("Closed\n");
         } catch(IOException e){
-            ResponseEdit.append("Closing error"+e.getStackTrace().toString()+"\n");
+            ResponseEdit.append("Closing error"+Log.getStackTraceString(e)+"\n");
             //don`t closed, so try again
             ConnectBtn.setEnabled(false);
             DisconnectBtn.setEnabled(true);
             SendBtn.setEnabled(false);
         } catch(Exception e){
-            ResponseEdit.append("Exception: "+e.getStackTrace().toString()+"\n");
+            ResponseEdit.append("Exception: "+Log.getStackTraceString(e)+"\n");
             //don`t closed, so try again
             ConnectBtn.setEnabled(false);
             DisconnectBtn.setEnabled(true);
@@ -181,13 +182,13 @@ public class MainActivity extends AppCompatActivity {
                 //Todo get response
                 s.close();
             } catch(SocketException e){
-                ResponseEdit.append("Sending udp error: "+e.getStackTrace().toString()+"\n");
+                ResponseEdit.append("Sending udp error: "+Log.getStackTraceString(e)+"\n");
             } catch(UnknownHostException e){
-                ResponseEdit.append("Unknown host error: "+e.getStackTrace().toString()+"\n");
+                ResponseEdit.append("Unknown host error: "+Log.getStackTraceString(e)+"\n");
             } catch(IOException e){
-                ResponseEdit.append("IO error: "+e.getStackTrace().toString()+"\n");
+                ResponseEdit.append("IO error: "+Log.getStackTraceString(e)+"\n");
             } catch(Exception e){
-                ResponseEdit.append("Exception: "+e.getStackTrace().toString()+"\n");
+                ResponseEdit.append("Exception: "+Log.getStackTraceString(e)+"\n");
             }
         } else { //send data by tcp
             try {
@@ -196,9 +197,9 @@ public class MainActivity extends AppCompatActivity {
                 response = convertStreamToString(in);
                 ResponseEdit.append(response);
             } catch(IOException e){
-                ResponseEdit.append("Sending tcp error: "+e.getStackTrace().toString()+"\n");
+                ResponseEdit.append("Sending tcp error: "+Log.getStackTraceString(e)+"\n");
             } catch(Exception e){
-                ResponseEdit.append("Exception: "+e.getStackTrace().toString()+"\n");
+                ResponseEdit.append("Exception: "+Log.getStackTraceString(e)+"\n");
             }
         }
     }
